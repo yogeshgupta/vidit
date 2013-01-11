@@ -1,0 +1,85 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="#000000" >
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="fill_horizontal"
+            android:textSize="15sp"
+            android:layout_marginTop="18dp"
+            android:textColor="#D0F5A9"
+        />
+<RelativeLayout
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="25dp" >
+	        
+    <ImageView
+        android:id="@+id/imgVideoThumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="imageThumb"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+    />
+    
+    <TextView
+        android:id="@+id/tvDateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"        
+        android:layout_toRightOf="@id/imgVideoThumbnail"
+        android:layout_marginTop="5dp"
+        android:textSize="15sp"
+        />
+    
+    <TextView
+        android:id="@+id/tvLength"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvDateTime"
+        android:layout_toRightOf="@id/imgVideoThumbnail"
+        android:textSize="15sp"
+        />
+    
+    <TextView
+        android:id="@+id/tvOwner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvLength"
+        android:layout_toRightOf="@id/imgVideoThumbnail"
+        android:textSize="15sp"
+        />
+    
+    <Button
+	        android:id="@+id/btnPlay"
+	        android:layout_width="wrap_content"
+	        android:layout_height="38dp"
+	        android:layout_below="@id/tvOwner"
+	        android:layout_toRightOf="@id/imgVideoThumbnail"
+	        android:text="Play" />
+
+	    <Button
+	        android:id="@+id/btnDownload"
+	        android:layout_width="wrap_content"
+	        android:layout_height="38dp"
+	        android:layout_below="@id/tvOwner"
+	        android:layout_toRightOf="@id/btnPlay"
+	        android:text="Download" />
+	    
+    </RelativeLayout>
+    
+	<VideoView
+        android:id="@+id/vvPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="140dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="10dp"
+        android:keepScreenOn="true" />
+    
+</LinearLayout>

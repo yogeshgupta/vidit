@@ -1,0 +1,82 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="#000000" >
+    
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:layout_marginTop="-3dp">
+
+        <Button
+    android:id="@+id/btnVideoByFriends"
+    android:layout_width="118.5dp"
+    android:layout_height="40dp"
+    android:layout_marginLeft="-3dp"
+    android:textSize="12sp" 
+    android:text="@string/strFrndsVideos" />
+        
+        <Button
+    android:id="@+id/btnVideoByMe"
+    android:layout_width="wrap_content"
+    android:layout_height="40dp"
+    android:text="@string/strMyVideos"
+    android:textSize="12sp"
+    android:layout_marginLeft="107dp" />
+        
+        <Button
+    android:id="@+id/btnVideoTagged"
+    android:layout_width="145dp"
+    android:layout_height="40dp"
+    android:textSize="12sp"
+    android:text="My Tagged Videos"
+    android:layout_marginLeft="178dp"
+    android:layout_marginRight="-3dp" />
+        
+    </RelativeLayout>
+
+
+
+    <RelativeLayout
+        android:layout_width="230dp"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/headLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="5dp"
+            android:textColor="#AFDEFE"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            android:typeface="serif" />
+
+        <com.facebook.widget.ProfilePictureView
+            android:id="@+id/fbPic"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="20dp" >
+        </com.facebook.widget.ProfilePictureView>
+    </RelativeLayout>
+    
+    <com.facebook.widget.LoginButton
+            android:id="@+id/loginButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp" />
+    
+    <ListView 
+        android:id="@+id/lstViewVideo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+    />
+
+</LinearLayout>
