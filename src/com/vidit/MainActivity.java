@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.facebook.*;
 import com.vidit.R;
@@ -16,13 +17,13 @@ public class MainActivity extends FacebookActivity {
 	
 	private Fragment loginFragment;
 	private boolean isResumed=false;
-	
+	private Session session;
+	private SessionState sessionState;
 	@Override
 	public void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-	    
 		if(savedInstanceState==null)
 		{
 			loginFragment=new LogFragment();
@@ -33,6 +34,7 @@ public class MainActivity extends FacebookActivity {
 		{
 			loginFragment=(LogFragment)getSupportFragmentManager()
 					.findFragmentById(android.R.id.content);
+			
 		}
 	}
 
@@ -40,9 +42,24 @@ public class MainActivity extends FacebookActivity {
 	public boolean onCreateOptionsMenu(Menu menu) 
 	{
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_main, menu);
+		getMenuInflater().inflate(R.menu.vidit_menu, menu);
 		return true;
 	}
+	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+ 
+        switch (item.getItemId())
+        {
+        	case R.id.log_out:
+        		this.session.close();
+        		return true;
+        		
+        	default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 	
 	@Override
 	public void onResume()
@@ -61,7 +78,8 @@ public class MainActivity extends FacebookActivity {
 	@Override
 	protected void onSessionStateChange(SessionState state, Exception exception) 
 	{
-	    super.onSessionStateChange(state, exception);
+	    sessionState=state;
+		super.onSessionStateChange(state, exception);
 	    if (isResumed) {
 	    	
 	    	((LogFragment) loginFragment).onSessionStateChange(state, exception,this.getSession());
@@ -73,7 +91,7 @@ public class MainActivity extends FacebookActivity {
 	{
 	    super.onResumeFragments();
 
-	    Session session = Session.getActiveSession();
+	    session = Session.getActiveSession();
 	    if (session != null && (session.isOpened() || session.isClosed()) ) 
 	    {
 	        onSessionStateChange(session.getState(), null);

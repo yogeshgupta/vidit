@@ -27,11 +27,11 @@
     android:layout_marginLeft="107dp" />
         
         <Button
-    android:id="@+id/btnVideoTagged"
+    android:id="@+id/btnTaggedVideo"
     android:layout_width="145dp"
     android:layout_height="40dp"
     android:textSize="12sp"
-    android:text="My Tagged Videos"
+    android:text="@string/strTagVideos"
     android:layout_marginLeft="178dp"
     android:layout_marginRight="-3dp" />
         
@@ -44,14 +44,13 @@
         android:layout_height="wrap_content" >
 
         <TextView
-            android:id="@+id/headLine"
+            android:id="@+id/tvUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="100dp"
             android:layout_marginTop="5dp"
             android:textColor="#AFDEFE"
             android:textSize="14sp"
-            android:textStyle="italic"
             android:typeface="serif" />
 
         <com.facebook.widget.ProfilePictureView

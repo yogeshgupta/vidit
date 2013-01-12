@@ -3,11 +3,14 @@
 
     <string name="app_name">Vidit! </string>
     <string name="app_id">195281390596562</string>
-    <string name="menu_settings">Settings</string>
+    <string name="logout">LogOut</string>
+    <string name="exit">Exit</string>
+    <string name="abtVidit">About Vidit!</string>
     <string name="search_hint">Search via title,owner</string>
     <string name="title_activity_video_details">Video Details</string>
     <string name="strFrndsVideos"><u>Video By Friends</u></string>
     <string name="strMyVideos">My Videos</string>
+    <string name="strTagVideos">Tagged Videos</string>
     <string name="title_activity_search_result">Search Result</string>
 
 </resources>

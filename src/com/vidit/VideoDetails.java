@@ -44,8 +44,10 @@ public class VideoDetails extends Activity {
 	private TextView tvOwner;
 	private TextView tvLength;
 	private ImageView imgThumbnail;
-	private Button btnPlay;
-	private Button btnDownload;
+	private Button btnPlayLQ;
+	private Button btnDownloadLQ;
+	private Button btnPlayHQ;
+	private Button btnDownloadHQ;
 	private JSONObject jsonObj;
 	private String title;
 	private VideoView fbVideo;
@@ -63,7 +65,7 @@ public class VideoDetails extends Activity {
 		} 
 		catch (JSONException e) 
 		{
-			Log.e("Your_APP_LOG_TAG","I got an error",e);
+			Log.e("Vidit_TAG","I got an error",e);
 		}
 		String strThumbLink=getIntent().getStringExtra("video_Thumb");
 		context=this;
@@ -72,8 +74,10 @@ public class VideoDetails extends Activity {
 		tvLength=(TextView)findViewById(R.id.tvLength);
 		tvOwner=(TextView)findViewById(R.id.tvOwner);
 		imgThumbnail=(ImageView)findViewById(R.id.imgVideoThumbnail);
-		btnDownload=(Button)findViewById(R.id.btnDownload);
-		btnPlay=(Button)findViewById(R.id.btnPlay);
+		btnDownloadLQ=(Button)findViewById(R.id.btnDownloadLQ);
+		btnPlayLQ=(Button)findViewById(R.id.btnPlayLQ);
+		btnDownloadHQ=(Button)findViewById(R.id.btnDownloadHQ);
+		btnPlayHQ=(Button)findViewById(R.id.btnPlayHQ);
 		fbVideo=(VideoView)findViewById(R.id.vvPlay);
 		try
 		{
@@ -97,10 +101,10 @@ public class VideoDetails extends Activity {
 		}
 		catch(Exception e)
 		{
-			Log.e("Your_APP_LOG_TAG","I got an error",e);
+			Log.e("Vidit_TAG","I got an error",e);
 		}
 		
-		btnDownload.setOnClickListener(new OnClickListener() {
+		btnDownloadLQ.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) 
@@ -112,12 +116,29 @@ public class VideoDetails extends Activity {
 				}
 				catch(Exception e)
 				{
-					Log.e("Your_APP_LOG_TAG","I got an error",e);
+					Log.e("Vidit_TAG","I got an error",e);
 				}
 			}
 		});
 		
-		btnPlay.setOnClickListener(new OnClickListener() {
+		btnDownloadHQ.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) 
+			{
+				try
+				{
+					new DownloadVideoTask().execute(jsonObj.getString("src_hq"));
+					
+				}
+				catch(Exception e)
+				{
+					Log.e("Vidit_TAG","I got an error",e);
+				}
+			}
+		});
+		
+		btnPlayLQ.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) 
@@ -133,7 +154,28 @@ public class VideoDetails extends Activity {
 				}
 				catch(Exception e)
 				{
-					Log.e("Your_APP_LOG_TAG","I got an error",e);
+					Log.e("Vidit_TAG","I got an error",e);
+				}
+			}
+		});
+		
+		btnPlayHQ.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) 
+			{
+				try
+				{
+					Uri uri=Uri.parse(jsonObj.getString("src_hq"));
+					fbVideo.setVideoURI(uri);
+				    fbVideo.setMediaController(new MediaController(context));
+				    fbVideo.requestFocus();
+				    fbVideo.start();
+					
+				}
+				catch(Exception e)
+				{
+					Log.e("Vidit_TAG","I got an error",e);
 				}
 			}
 		});
@@ -142,7 +184,7 @@ public class VideoDetails extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.video_details_layout, menu);
+		getMenuInflater().inflate(R.menu.vidit_menu, menu);
 		return true;
 	}
 	
