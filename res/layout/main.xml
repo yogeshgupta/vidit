@@ -28,7 +28,7 @@
         
         <Button
     android:id="@+id/btnTaggedVideo"
-    android:layout_width="145dp"
+    android:layout_width="147dp"
     android:layout_height="40dp"
     android:textSize="12sp"
     android:text="@string/strTagVideos"
@@ -40,18 +40,19 @@
 
 
     <RelativeLayout
-        android:layout_width="230dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
 
         <TextView
             android:id="@+id/tvUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
+            android:layout_marginLeft="150dp"
             android:layout_marginTop="5dp"
-            android:textColor="#082AD2"
+            android:textColor="#491A1A"
             android:textSize="14sp"
-            android:typeface="serif" />
+            android:typeface="monospace" 
+            android:textStyle="bold"/>
 
         <com.facebook.widget.ProfilePictureView
             android:id="@+id/fbPic"

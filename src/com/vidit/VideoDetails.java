@@ -39,15 +39,9 @@ import com.vidit.R;
 @SuppressLint("SimpleDateFormat")
 public class VideoDetails extends Activity {
 	
-	private TextView tvTitle;
-	private TextView tvDateTime;
-	private TextView tvOwner;
-	private TextView tvLength;
+	private TextView tvTitle,tvDateTime,tvOwner,tvLength;
 	private ImageView imgThumbnail;
-	private Button btnPlayLQ;
-	private Button btnDownloadLQ;
-	private Button btnPlayHQ;
-	private Button btnDownloadHQ;
+	private Button btnPlayLQ,btnDownloadLQ,btnPlayHQ,btnDownloadHQ;
 	private JSONObject jsonObj;
 	private String title;
 	private VideoView fbVideo;
@@ -84,7 +78,7 @@ public class VideoDetails extends Activity {
 			title=jsonObj.getString("title");
 			if(title.equalsIgnoreCase(""))
 				title="Untitled";
-			tvTitle.setText("Title: "+jsonObj.getString("title"));
+			tvTitle.setText("Title: "+title);
 			DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 			tvDateTime.setText("Added On: " + formatter.format(Long.valueOf(jsonObj.getString("created_time")).longValue()*1000));
 			float length=Float.parseFloat(jsonObj.getString("length"));
@@ -200,6 +194,7 @@ public class VideoDetails extends Activity {
 		
 	    protected String doInBackground(String... urls) 
 	    {
+	    	int i=0;
 	    	try
 	    	{
 	    		URL url = new URL (urls[0]);
@@ -209,7 +204,7 @@ public class VideoDetails extends Activity {
 	    			//The sdcard directory e.g. '/sdcard' can be used directly, or 
 	    			//more safely abstracted with getExternalStorageDirectory()
 	    			String root = Environment.getExternalStorageDirectory().toString();
-	    			File storagePath = new File(root + "/mubi");    
+	    			File storagePath = new File(root + "/vidit");    
 	    			storagePath.mkdirs();
 	    			OutputStream output = new FileOutputStream (new File(storagePath,title+".mp4"));
 	    			try 
@@ -223,7 +218,7 @@ public class VideoDetails extends Activity {
 	    	    	}
 	    			catch(Exception e)
 	    			{	
-	    				tvTitle.setText(e.toString());
+	    				Log.e("Vidit_TAG","I got an error",e);
 	    			}
 	    			finally 
 	    			{
@@ -232,7 +227,7 @@ public class VideoDetails extends Activity {
 	    		}
 	    		catch(Exception e)
 	    		{
-	    			tvTitle.setText(e.toString());
+	    			Log.e("Vidit_TAG","I got an error",e);
 	    		}
 	    		finally 
 	    		{
@@ -243,7 +238,7 @@ public class VideoDetails extends Activity {
 	    	}
 	    	catch(Exception e)
 	    	{
-	    		tvTitle.setText(e.toString());
+	    		Log.e("Vidit_TAG","I got an error",e);
 	    	}
 	    	
 			return null;

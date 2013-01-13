@@ -38,26 +38,24 @@ import com.vidit.R;
 public class LogFragment extends Fragment 
 {
 	
-	protected static final String TAG = null;
+	protected static final String TAG = "vidit";
 	public int index=2;
+	public boolean savedInst=false,fListStat=false,mListStat=false,tListStat=false;
 	public String fqlQuery="{'friends':'SELECT uid2 FROM friend WHERE uid1 = me()',"+
     		"'friendsVideo':'SELECT vid, src, src_hq, owner, title, description,thumbnail_link, created_time,length FROM video WHERE owner IN "+
     		"(SELECT uid2 FROM #friends) ORDER BY created_time DESC'," +
     		"'ownerName':'SELECT uid,first_name,last_name FROM user WHERE uid IN " +
     		"(SELECT owner FROM #friendsVideo)',}";
 	private LoginButton loginButton;
-	private Button btnMyVideos;
-	private Button btnFriendsVideos;
-	private Button btnTaggedVideos;
+	private Button btnMyVideos,btnFriendsVideos,btnTaggedVideos;
 	private ProfilePictureView profilePictureView;
 	private TextView userNameView;
 	private ListView listView;
-	private JSONArray data1;
+	private JSONArray data1,ownerArray,frndsArray,myArray,taggedArray,ownFrry,ownTrry;
+	private JSONObject json;
 	private List<HashMap<String,String>> vidDetList;
-	private JSONArray ownerArray;
 	private ArrayList<String> imageUrl=new ArrayList<String>();
-	private String firstName;
-	private String lastName;
+	private String firstName,lastName;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) 
@@ -83,7 +81,18 @@ public class LogFragment extends Fragment
 	    btnTaggedVideos=(Button)view.findViewById(R.id.btnTaggedVideo);
 	    userNameView = (TextView) view.findViewById(R.id.tvUserName);
 	    listView = ( ListView ) view.findViewById(R.id.lstViewVideo);
-	    
+	    if(savedInstanceState!=null)
+	    {
+	    	try 
+	    	{
+				data1=new JSONArray(savedInstanceState.getString("data1"));
+				ownerArray=new JSONArray(savedInstanceState.getString("ownerArray"));
+			} 
+	    	catch (JSONException e) 
+			{
+				Log.e("Vidit_TAG","I got an error",e);
+			}
+	    }
 	    return view;
 	}
 	
@@ -91,8 +100,12 @@ public class LogFragment extends Fragment
 	public void onSaveInstanceState(Bundle savedInstanceState) 
 	{
 	  super.onSaveInstanceState(savedInstanceState);
+	  savedInst=true;
 	  savedInstanceState.putInt("index", index);
 	  savedInstanceState.putString("fqlQuery", fqlQuery);
+	  savedInstanceState.putBoolean("savedInst", savedInst);
+	  savedInstanceState.putString("data1", data1.toString());
+	  savedInstanceState.putString("ownerArray", ownerArray.toString());
 	}
 	
 	//Displaying user info
@@ -123,9 +136,14 @@ public class LogFragment extends Fragment
 				Request.executeBatchAsync(request);
 				
 
-				
-				//Displaying list in case of default view
-				showList(index, fqlQuery, session);
+				if(savedInst)
+				{
+					showListRet();
+				}
+				else //Displaying list in case of default view
+				{
+					showList(index, fqlQuery, session);
+				}
 				
 				//Onclick of My Videos button
 				btnMyVideos.setOnClickListener(new OnClickListener() {
@@ -140,15 +158,24 @@ public class LogFragment extends Fragment
 						btnMyVideos.setText(content);
 						if(index!=1)
 						{
-							fqlQuery="SELECT vid, src, src_hq, owner, title, description,thumbnail_link, created_time,length FROM video WHERE owner=me() ORDER BY created_time DESC";
-							try
+							if(mListStat==true)
 							{
 								index=1;
-								showList(index, fqlQuery, session);
+								data1=myArray;
+								showListRet();
 							}
-							catch(Exception e)
+							else
 							{
-								Log.e("Vidit_TAG","I got an error",e);
+								fqlQuery="SELECT vid, src, src_hq, owner, title, description,thumbnail_link, created_time,length FROM video WHERE owner=me() ORDER BY created_time DESC";
+								try
+								{
+									index=1;
+									showList(index, fqlQuery, session);
+								}
+								catch(Exception e)
+								{
+									Log.e("Vidit_TAG","I got an error",e);
+								}
 							}
 						}
 					}
@@ -165,21 +192,32 @@ public class LogFragment extends Fragment
 						SpannableString content = new SpannableString("Video By Friends");
 						content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
 						btnFriendsVideos.setText(content);
+						
 						if(index!=2)
 						{
-							fqlQuery="{'friends':'SELECT uid2 FROM friend WHERE uid1 = me()',"+
-					        		"'friendsVideo':'SELECT vid, src, src_hq, owner, title, description,thumbnail_link, created_time,length FROM video WHERE owner IN "+
-					        		"(SELECT uid2 FROM #friends) ORDER BY created_time DESC'," +
-					        		"'ownerName':'SELECT uid,first_name,last_name FROM user WHERE uid IN " +
-					        		"(SELECT owner FROM #friendsVideo)',}";
-							try
+							if(fListStat==true)
 							{
 								index=2;
-								showList(index, fqlQuery, session);
+								data1=frndsArray;
+								ownerArray=ownFrry;
+								showListRet();
 							}
-							catch(Exception e)
+							else
 							{
-								Log.e("Vidit_TAG","I got an error",e);
+								fqlQuery="{'friends':'SELECT uid2 FROM friend WHERE uid1 = me()',"+
+						        		"'friendsVideo':'SELECT vid, src, src_hq, owner, title, description,thumbnail_link, created_time,length FROM video WHERE owner IN "+
+						        		"(SELECT uid2 FROM #friends) ORDER BY created_time DESC'," +
+						        		"'ownerName':'SELECT uid,first_name,last_name FROM user WHERE uid IN " +
+						        		"(SELECT owner FROM #friendsVideo)',}";
+								try
+								{
+									index=2;
+									showList(index, fqlQuery, session);
+								}
+								catch(Exception e)
+								{
+									Log.e("Vidit_TAG","I got an error",e);
+								}
 							}
 						}
 					}
@@ -196,20 +234,31 @@ public class LogFragment extends Fragment
 						SpannableString content = new SpannableString("Tagged Videos");
 						content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
 						btnTaggedVideos.setText(content);
+						
 						if(index!=3)
 						{
-							fqlQuery="{'friendsVideo':'SELECT vid, src, src_hq, owner, title, description,thumbnail_link, created_time,length FROM video WHERE vid IN "+
-					        		"(SELECT vid FROM video_tag WHERE subject=me()) ORDER BY created_time DESC'," +
-					        		"'ownerName':'SELECT uid,first_name,last_name FROM user WHERE uid IN " +
-					        		"(SELECT owner FROM #friendsVideo)',}";
-							try
+							if(tListStat==true)
 							{
 								index=3;
-								showList(index, fqlQuery, session);
+								data1=taggedArray;
+								ownerArray=ownTrry;
+								showListRet();
 							}
-							catch(Exception e)
+							else
 							{
-								Log.e("Vidit_TAG","I got an error",e);
+								fqlQuery="{'friendsVideo':'SELECT vid, src, src_hq, owner, title, description,thumbnail_link, created_time,length FROM video WHERE vid IN "+
+						        		"(SELECT vid FROM video_tag WHERE subject=me()) ORDER BY created_time DESC'," +
+						        		"'ownerName':'SELECT uid,first_name,last_name FROM user WHERE uid IN " +
+						        		"(SELECT owner FROM #friendsVideo)',}";
+								try
+								{
+									index=3;
+									showList(index, fqlQuery, session);
+								}
+								catch(Exception e)
+								{
+									Log.e("Vidit_TAG","I got an error",e);
+								}
 							}
 						}
 					}
@@ -258,13 +307,15 @@ public class LogFragment extends Fragment
 				{
 					if(no==1)
 					{	
-						JSONObject json = Util.parseJson(edit);
+						json = Util.parseJson(edit);
 						data1 = json.getJSONArray( "data" );
+						myArray=data1;
+						mListStat=true;
 					}
 					else
 					{
 				
-						JSONObject json = Util.parseJson(edit);
+						json = Util.parseJson(edit);
 						JSONArray data = json.getJSONArray( "data" );
 						JSONObject getVideo=null;
 						JSONObject getOwner=null;;
@@ -284,6 +335,18 @@ public class LogFragment extends Fragment
 						JSONObject jsonOwner = Util.parseJson(s1);
 						data1 = json1.getJSONArray("data");
 						ownerArray=jsonOwner.getJSONArray("data");
+						if(no==2)
+						{
+							frndsArray=data1;
+							ownFrry=ownerArray;
+							fListStat=true;
+						}
+						else
+						{
+							taggedArray=data1;
+							ownTrry=ownerArray;
+							tListStat=true;
+						}
 					}
 					vidDetList = new ArrayList<HashMap<String,String>>();
 					for ( int i = 0, size = data1.length(); i < size; i++ )
@@ -387,7 +450,112 @@ public class LogFragment extends Fragment
 		});
 		Request.executeBatchAsync(request1);
 			
-	}	
+	}
+	
+	public void showListRet()
+	{
+		final ArrayList<String> ownerList=new ArrayList<String>();
+		int no=index;
+		vidDetList = new ArrayList<HashMap<String,String>>();
+		try
+		{
+			for ( int i = 0, size = data1.length(); i < size; i++ )
+			{
+				HashMap<String, String> hm = new HashMap<String,String>();
+				JSONObject getVidDetails=data1.getJSONObject(i);
+				String title=getVidDetails.getString("title");
+				if(title.equalsIgnoreCase(""))
+				title="Untitled";
+				hm.put("title", "Title : " + title );
+				DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+				hm.put("creationDate","Created On : " + formatter.format(Long.valueOf(getVidDetails.getString("created_time")).longValue()*1000));
+				imageUrl.add(getVidDetails.getString("thumbnail_link"));
+				try
+				{
+					String arr[]=new String[2];
+					arr[0]=getVidDetails.getString("thumbnail_link");
+					arr[1]=getVidDetails.getString("vid");
+					new DownloadImageTask().execute(arr);
+					
+				}
+				catch(Exception e)
+				{
+					Log.e("Vidit_TAG","I got an error",e);
+				}
+				
+				try
+				{
+					String pathName=Environment.getExternalStorageDirectory().toString()+"/.FidVids/"+getVidDetails.getString("vid")+".jpg";
+					hm.put("videoThumb",pathName);
+				}
+				catch(Exception e)
+				{
+					Log.e("Vidit_TAG","I got an error",e);
+				}
+				
+	
+				if(no==1)
+				{
+					firstName="You";
+					lastName="";
+				}
+				
+				else
+				{
+					for ( int j = 0, size1 = ownerArray.length(); j < size1; j++ )
+					{
+						JSONObject ownerObject=ownerArray.getJSONObject(j);
+						if(getVidDetails.getString("owner").equalsIgnoreCase(ownerObject.getString("uid")))
+						{
+							firstName=ownerObject.getString("first_name");
+							lastName=ownerObject.getString("last_name");
+							break;
+						}
+						
+					}
+				}
+				ownerList.add(firstName+" "+lastName);
+				hm.put("owner","Owner : " +firstName+" "+lastName );
+				vidDetList.add(hm);
+			}
+			
+			String[] itemControl = {"videoThumb","title","creationDate","owner"};
+			int[] itemLayout={R.id.videoThumb,R.id.title,R.id.creationDate,R.id.owner};
+			SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), vidDetList, R.layout.listvideos_layout, itemControl, itemLayout);
+			listView.setAdapter(adapter);
+			
+			getActivity().sendBroadcast(new Intent(
+				Intent.ACTION_MEDIA_MOUNTED,
+			            Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+		    	
+				
+			listView.setOnItemClickListener(new OnItemClickListener() 
+			{
+					
+				@SuppressWarnings("rawtypes")
+				public void onItemClick(AdapterView parent, View v, int position, long id)
+				{
+					 try
+					 {
+						 JSONObject videoDetails=data1.getJSONObject(position);
+						 Intent i = new Intent(getActivity(), VideoDetails.class);
+						 i.putExtra("video_Details",videoDetails.toString());
+						 i.putExtra("ownerDetails",ownerList.get(position));
+						 i.putExtra("video_Thumb", Environment.getExternalStorageDirectory().toString()+"/.FidVids/"+videoDetails.getString("vid")+".jpg");
+						 startActivity(i);
+					 }
+					 catch(Exception e)
+					 {
+						 Log.e("Vidit_TAG","I got an error",e);
+					 }
+				 }
+			});
+		}
+		catch(Exception e)
+		{
+			
+		}
+	}
 	
 	public static int nthOccurrence(String str, char c, int n) 
 	{
