@@ -42,7 +42,7 @@ public class LogFragment extends Fragment
 	public int index=2;
 	public String fqlQuery="{'friends':'SELECT uid2 FROM friend WHERE uid1 = me()',"+
     		"'friendsVideo':'SELECT vid, src, src_hq, owner, title, description,thumbnail_link, created_time,length FROM video WHERE owner IN "+
-    		"(SELECT uid2 FROM #friends) ORDER BY created_time'," +
+    		"(SELECT uid2 FROM #friends) ORDER BY created_time DESC'," +
     		"'ownerName':'SELECT uid,first_name,last_name FROM user WHERE uid IN " +
     		"(SELECT owner FROM #friendsVideo)',}";
 	private LoginButton loginButton;
@@ -140,7 +140,7 @@ public class LogFragment extends Fragment
 						btnMyVideos.setText(content);
 						if(index!=1)
 						{
-							fqlQuery="SELECT vid, src, src_hq, owner, title, description,thumbnail_link, created_time,length FROM video WHERE owner=me()";
+							fqlQuery="SELECT vid, src, src_hq, owner, title, description,thumbnail_link, created_time,length FROM video WHERE owner=me() ORDER BY created_time DESC";
 							try
 							{
 								index=1;
@@ -169,7 +169,7 @@ public class LogFragment extends Fragment
 						{
 							fqlQuery="{'friends':'SELECT uid2 FROM friend WHERE uid1 = me()',"+
 					        		"'friendsVideo':'SELECT vid, src, src_hq, owner, title, description,thumbnail_link, created_time,length FROM video WHERE owner IN "+
-					        		"(SELECT uid2 FROM #friends) ORDER BY created_time'," +
+					        		"(SELECT uid2 FROM #friends) ORDER BY created_time DESC'," +
 					        		"'ownerName':'SELECT uid,first_name,last_name FROM user WHERE uid IN " +
 					        		"(SELECT owner FROM #friendsVideo)',}";
 							try
@@ -199,7 +199,7 @@ public class LogFragment extends Fragment
 						if(index!=3)
 						{
 							fqlQuery="{'friendsVideo':'SELECT vid, src, src_hq, owner, title, description,thumbnail_link, created_time,length FROM video WHERE vid IN "+
-					        		"(SELECT vid FROM video_tag WHERE subject=me()) ORDER BY created_time'," +
+					        		"(SELECT vid FROM video_tag WHERE subject=me()) ORDER BY created_time DESC'," +
 					        		"'ownerName':'SELECT uid,first_name,last_name FROM user WHERE uid IN " +
 					        		"(SELECT owner FROM #friendsVideo)',}";
 							try
