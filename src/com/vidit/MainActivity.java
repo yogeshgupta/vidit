@@ -104,8 +104,10 @@ public class MainActivity extends FacebookActivity {
 		super.onStop();
 		File storagePath = new File(Environment.getExternalStorageDirectory().toString() + "/FidVids");
 		boolean delDirectory=deleteDirectory(storagePath);
-    }*/
+    }
 	
+	
+	//Delete the directory where images are saved when the app is exited
 	static public boolean deleteDirectory(File path) {
 	    if( path.exists() ) {
 	      File[] files = path.listFiles();
@@ -122,7 +124,7 @@ public class MainActivity extends FacebookActivity {
 	      }
 	    }
 	    return( path.delete() );
-	  }
+	  }*/
 }
 
 

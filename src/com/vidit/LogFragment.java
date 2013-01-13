@@ -312,7 +312,7 @@ public class LogFragment extends Fragment
 						
 						try
 						{
-							String pathName=Environment.getExternalStorageDirectory().toString()+"/FidVids/"+getVidDetails.getString("vid")+".jpg";
+							String pathName=Environment.getExternalStorageDirectory().toString()+"/.FidVids/"+getVidDetails.getString("vid")+".jpg";
 							hm.put("videoThumb",pathName);
 						}
 						catch(Exception e)
@@ -368,7 +368,7 @@ public class LogFragment extends Fragment
 								 Intent i = new Intent(getActivity(), VideoDetails.class);
 								 i.putExtra("video_Details",videoDetails.toString());
 								 i.putExtra("ownerDetails",ownerList.get(position));
-								 i.putExtra("video_Thumb", Environment.getExternalStorageDirectory().toString()+"/FidVids/"+videoDetails.getString("vid")+".jpg");
+								 i.putExtra("video_Thumb", Environment.getExternalStorageDirectory().toString()+"/.FidVids/"+videoDetails.getString("vid")+".jpg");
 								 startActivity(i);
 							 }
 							 catch(Exception e)
@@ -411,7 +411,7 @@ public class LogFragment extends Fragment
 	    			//The sdcard directory e.g. '/sdcard' can be used directly, or 
 	    			//more safely abstracted with getExternalStorageDirectory()
 	    			String root = Environment.getExternalStorageDirectory().toString();
-	    			File storagePath = new File(root + "/FidVids");    
+	    			File storagePath = new File(root + "/.FidVids");    
 	    			storagePath.mkdirs();
 	    			OutputStream output = new FileOutputStream (new File(storagePath,urls[1]+".jpg"));
 	    			try {
