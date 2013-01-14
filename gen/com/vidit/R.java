@@ -234,6 +234,7 @@ containing a value of this type.
         public static final int com_facebook_picker_top_bar=0x7f050011;
         public static final int com_facebook_placepickerfragment_search_box_stub=0x7f050016;
         public static final int creationDate=0x7f05001b;
+        public static final int exit=0x7f05002f;
         public static final int fbPic=0x7f050021;
         public static final int fragment_container=0x7f050003;
         public static final int imgVideoThumbnail=0x7f050025;
@@ -241,7 +242,6 @@ containing a value of this type.
         public static final int log_out=0x7f05002e;
         public static final int loginButton=0x7f050022;
         public static final int lstViewVideo=0x7f050023;
-        public static final int menu=0x7f05002f;
         public static final int normal=0x7f050001;
         public static final int owner=0x7f05001c;
         public static final int picker_subtitle=0x7f050018;

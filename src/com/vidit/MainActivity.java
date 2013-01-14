@@ -18,6 +18,7 @@ public class MainActivity extends FacebookActivity {
 	private Fragment loginFragment;
 	private boolean isResumed=false;
 	private Session session;
+	private MenuItem logInOut;
 	private SessionState sessionState;
 	@Override
 	public void onCreate(Bundle savedInstanceState) 
@@ -42,6 +43,11 @@ public class MainActivity extends FacebookActivity {
 	public boolean onCreateOptionsMenu(Menu menu) 
 	{
 		// Inflate the menu; this adds items to the action bar if it is present.
+		logInOut=(MenuItem)findViewById(R.id.log_out);
+		/*if(this.session==null)
+			logInOut.setVisible(false);
+		else
+			logInOut.setVisible(true);*/
 		getMenuInflater().inflate(R.menu.vidit_menu, menu);
 		return true;
 	}
@@ -53,7 +59,11 @@ public class MainActivity extends FacebookActivity {
         switch (item.getItemId())
         {
         	case R.id.log_out:
-        		this.session.close();
+        		this.session.closeAndClearTokenInformation();
+        		return true;
+        		
+        	case R.id.exit:
+        		this.finish();
         		return true;
         		
         	default:

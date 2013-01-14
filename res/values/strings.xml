@@ -3,7 +3,7 @@
 
     <string name="app_name">Vidit! </string>
     <string name="app_id">195281390596562</string>
-    <string name="logout">LogOut</string>
+    <string name="logout">Log out</string>
     <string name="exit">Exit</string>
     <string name="abtVidit">About Vidit!</string>
     <string name="search_hint">Search via title,owner</string>
