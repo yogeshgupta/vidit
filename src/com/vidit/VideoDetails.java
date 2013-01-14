@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.annotation.SuppressLint;
@@ -105,7 +106,10 @@ public class VideoDetails extends Activity {
 			{
 				try
 				{
-					new DownloadVideoTask().execute(jsonObj.getString("src"));
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+						new DownloadVideoTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,jsonObj.getString("src"));
+					else
+						new DownloadVideoTask().execute(jsonObj.getString("src"));
 					
 				}
 				catch(Exception e)
