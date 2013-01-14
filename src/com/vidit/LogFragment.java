@@ -101,12 +101,15 @@ public class LogFragment extends Fragment
 	public void onSaveInstanceState(Bundle savedInstanceState) 
 	{
 	  super.onSaveInstanceState(savedInstanceState);
-	  savedInst=true;
-	  savedInstanceState.putInt("index", index);
-	  savedInstanceState.putString("fqlQuery", fqlQuery);
-	  savedInstanceState.putBoolean("savedInst", savedInst);
-	  savedInstanceState.putString("data1", data1.toString());
-	  savedInstanceState.putString("ownerArray", ownerArray.toString());
+	  if(data1!=null)
+	  {
+		  savedInst=true;
+		  savedInstanceState.putInt("index", index);
+		  savedInstanceState.putString("fqlQuery", fqlQuery);
+		  savedInstanceState.putBoolean("savedInst", savedInst);
+		  savedInstanceState.putString("data1", data1.toString());
+		  savedInstanceState.putString("ownerArray", ownerArray.toString());
+	  }
 	}
 	
 	//Displaying user info
