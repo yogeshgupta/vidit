@@ -44,7 +44,7 @@ public class VideoDetails extends Activity {
 	private ImageView imgThumbnail;
 	private Button btnPlayLQ,btnDownloadLQ,btnPlayHQ,btnDownloadHQ;
 	private JSONObject jsonObj;
-	private String title;
+	private String title,vid;
 	private VideoView fbVideo;
 	private Context context;
 	public static final int DIALOG_DOWNLOAD_PROGRESS = 0;
@@ -77,6 +77,7 @@ public class VideoDetails extends Activity {
 		try
 		{
 			title=jsonObj.getString("title");
+			vid=jsonObj.getString("vid");
 			if(title.equalsIgnoreCase(""))
 				title="Untitled";
 			tvTitle.setText("Title: "+title);
@@ -210,6 +211,8 @@ public class VideoDetails extends Activity {
 	    			String root = Environment.getExternalStorageDirectory().toString();
 	    			File storagePath = new File(root + "/vidit");    
 	    			storagePath.mkdirs();
+	    			if(title=="Untitled")
+	    				title+="_"+vid;
 	    			OutputStream output = new FileOutputStream (new File(storagePath,title+".mp4"));
 	    			try 
 	    			{
@@ -276,6 +279,8 @@ public class VideoDetails extends Activity {
         switch (id) {
             case DIALOG_DOWNLOAD_PROGRESS:
                 mProgressDialog = new ProgressDialog(this);
+                if(title=="Untitled")
+    				title+="_"+vid;
                 mProgressDialog.setMessage("Downloading "+title);
                 mProgressDialog.show();
                 return mProgressDialog;
