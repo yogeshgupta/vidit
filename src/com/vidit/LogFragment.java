@@ -366,7 +366,10 @@ public class LogFragment extends Fragment
 							String arr[]=new String[2];
 							arr[0]=getVidDetails.getString("thumbnail_link");
 							arr[1]=getVidDetails.getString("vid");
-							new DownloadImageTask().execute(arr);
+							if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+								new DownloadImageTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,arr);
+							else
+								new DownloadImageTask().execute(arr);
 							
 						}
 						catch(Exception e)
