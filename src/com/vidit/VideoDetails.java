@@ -100,6 +100,7 @@ public class VideoDetails extends Activity {
 			Log.e("Vidit_TAG","I got an error",e);
 		}
 		
+		//To Download low quality videos
 		btnDownloadLQ.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -107,6 +108,7 @@ public class VideoDetails extends Activity {
 			{
 				try
 				{
+					//Checking the version of OS enviroment and performing multithreading task to download videos
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 						new DownloadVideoTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,jsonObj.getString("src"));
 					else
@@ -120,6 +122,7 @@ public class VideoDetails extends Activity {
 			}
 		});
 		
+		//To Download high quality videos
 		btnDownloadHQ.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -137,6 +140,7 @@ public class VideoDetails extends Activity {
 			}
 		});
 		
+		//To play low quality videos
 		btnPlayLQ.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -158,6 +162,7 @@ public class VideoDetails extends Activity {
 			}
 		});
 		
+		//To play high quality videos
 		btnPlayHQ.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -187,6 +192,7 @@ public class VideoDetails extends Activity {
 		return true;
 	}
 	
+	//Video Download async method
 	private class DownloadVideoTask extends AsyncTask<String, String, String> 
 	{
 		

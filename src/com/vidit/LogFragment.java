@@ -39,14 +39,15 @@ import com.vidit.R;
 public class LogFragment extends Fragment 
 {
 	
-	protected static final String TAG = "vidit";
 	public int index=2;
-	public boolean savedInst=false,fListStat=false,mListStat=false,tListStat=false;
+	public boolean savedInst,fListStat,mListStat,tListStat,boolChk;
+	protected static final String TAG = "vidit";
 	public String fqlQuery="{'friends':'SELECT uid2 FROM friend WHERE uid1 = me()',"+
     		"'friendsVideo':'SELECT vid, src, src_hq, owner, title, description,thumbnail_link, created_time,length FROM video WHERE owner IN "+
     		"(SELECT uid2 FROM #friends) ORDER BY created_time DESC'," +
     		"'ownerName':'SELECT uid,first_name,last_name FROM user WHERE uid IN " +
     		"(SELECT owner FROM #friendsVideo)',}";
+	private String firstName,lastName;
 	private LoginButton loginButton;
 	private Button btnMyVideos,btnFriendsVideos,btnTaggedVideos;
 	private ProfilePictureView profilePictureView;
@@ -56,7 +57,6 @@ public class LogFragment extends Fragment
 	private JSONObject json;
 	private List<HashMap<String,String>> vidDetList;
 	private ArrayList<String> imageUrl=new ArrayList<String>();
-	private String firstName,lastName;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) 
@@ -101,6 +101,8 @@ public class LogFragment extends Fragment
 	public void onSaveInstanceState(Bundle savedInstanceState) 
 	{
 	  super.onSaveInstanceState(savedInstanceState);
+	  
+	  //Check if app is running for the first time in device
 	  if(data1!=null)
 	  {
 		  savedInst=true;
@@ -124,6 +126,8 @@ public class LogFragment extends Fragment
 				btnFriendsVideos.setVisibility(View.VISIBLE);
 				btnMyVideos.setVisibility(View.VISIBLE);
 				btnTaggedVideos.setVisibility(View.VISIBLE);
+				
+				//Getting the user details, profile pic and name of the user in this case
 				Request request = Request.newMeRequest(session, new Request.GraphUserCallback() 
 				{
 					@Override
@@ -139,10 +143,11 @@ public class LogFragment extends Fragment
 				});
 				Request.executeBatchAsync(request);
 				
-
+				//If an instance is already loaded for the current process getting and displaying data from there
+				//else getting data from cloud and displaying it
 				if(savedInst)
 				{
-					showListRet();
+					displayList();
 				}
 				else //Displaying list in case of default view
 				{
@@ -160,13 +165,14 @@ public class LogFragment extends Fragment
 						SpannableString content = new SpannableString("My Videos");
 						content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
 						btnMyVideos.setText(content);
+						//Checking if switch is from another tab
 						if(index!=1)
 						{
 							if(mListStat==true)
 							{
 								index=1;
 								data1=myArray;
-								showListRet();
+								displayList();
 							}
 							else
 							{
@@ -185,9 +191,9 @@ public class LogFragment extends Fragment
 					}
 				});
 				
+				//OnClick of Video by friends tab
 				btnFriendsVideos.setOnClickListener(new OnClickListener() 
 				{
-					
 					@Override
 					public void onClick(View arg0) 
 					{
@@ -204,7 +210,7 @@ public class LogFragment extends Fragment
 								index=2;
 								data1=frndsArray;
 								ownerArray=ownFrry;
-								showListRet();
+								displayList();
 							}
 							else
 							{
@@ -227,6 +233,7 @@ public class LogFragment extends Fragment
 					}
 				});
 				
+				//Onclick of tagged videos tab
 				btnTaggedVideos.setOnClickListener(new OnClickListener() 
 				{
 					
@@ -246,7 +253,7 @@ public class LogFragment extends Fragment
 								index=3;
 								data1=taggedArray;
 								ownerArray=ownTrry;
-								showListRet();
+								displayList();
 							}
 							else
 							{
@@ -290,7 +297,7 @@ public class LogFragment extends Fragment
 	//To display the list of videos by category
 	public void showList(final int no,String fqlQuery, Session session)
 	{
-		final ArrayList<String> ownerList=new ArrayList<String>();
+		final ArrayList<String> ownerList=new ArrayList<String>();	//To store the owner names from ownerarray fetched
 		listView.setAdapter(null);
 		data1=null;
 		vidDetList=null;
@@ -299,6 +306,7 @@ public class LogFragment extends Fragment
         
 		params.putString("q", fqlQuery);
         
+		//Fetching video details and displaying them using fql query and graph api
 		Request request1 = new Request(session,"/fql",params,HttpMethod.GET,new Request.Callback()
 		{
 			@SuppressLint("SimpleDateFormat")
@@ -352,101 +360,8 @@ public class LogFragment extends Fragment
 							tListStat=true;
 						}
 					}
-					vidDetList = new ArrayList<HashMap<String,String>>();
-					for ( int i = 0, size = data1.length(); i < size; i++ )
-					{
-						HashMap<String, String> hm = new HashMap<String,String>();
-						JSONObject getVidDetails=data1.getJSONObject(i);
-						String title=getVidDetails.getString("title");
-						if(title.equalsIgnoreCase(""))
-						title="Untitled";
-						hm.put("title", "Title : " + title );
-						DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-						hm.put("creationDate","Created On : " + formatter.format(Long.valueOf(getVidDetails.getString("created_time")).longValue()*1000));
-						imageUrl.add(getVidDetails.getString("thumbnail_link"));
-						try
-						{
-							String arr[]=new String[2];
-							arr[0]=getVidDetails.getString("thumbnail_link");
-							arr[1]=getVidDetails.getString("vid");
-							if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-								new DownloadImageTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,arr);
-							else
-								new DownloadImageTask().execute(arr);
-							
-						}
-						catch(Exception e)
-						{
-							Log.e("Vidit_TAG","I got an error",e);
-						}
-						
-						try
-						{
-							String pathName=Environment.getExternalStorageDirectory().toString()+"/.FidVids/"+getVidDetails.getString("vid")+".jpg";
-							hm.put("videoThumb",pathName);
-						}
-						catch(Exception e)
-						{
-							Log.e("Vidit_TAG","I got an error",e);
-						}
-						
-
-						if(no==1)
-						{
-							firstName="You";
-							lastName="";
-						}
-						
-						else
-						{
-							for ( int j = 0, size1 = ownerArray.length(); j < size1; j++ )
-							{
-								JSONObject ownerObject=ownerArray.getJSONObject(j);
-								if(getVidDetails.getString("owner").equalsIgnoreCase(ownerObject.getString("uid")))
-								{
-									firstName=ownerObject.getString("first_name");
-									lastName=ownerObject.getString("last_name");
-									break;
-								}
-								
-							}
-						}
-						ownerList.add(firstName+" "+lastName);
-						hm.put("owner","Owner : " +firstName+" "+lastName );
-						vidDetList.add(hm);
-					}
-					
-					String[] itemControl = {"videoThumb","title","creationDate","owner"};
-					int[] itemLayout={R.id.videoThumb,R.id.title,R.id.creationDate,R.id.owner};
-					SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), vidDetList, R.layout.listvideos_layout, itemControl, itemLayout);
-					listView.setAdapter(adapter);
-					
-					getActivity().sendBroadcast(new Intent(
-						Intent.ACTION_MEDIA_MOUNTED,
-					            Uri.parse("file://" + Environment.getExternalStorageDirectory())));
-				    	
-						
-					listView.setOnItemClickListener(new OnItemClickListener() 
-					{
-							
-						@SuppressWarnings("rawtypes")
-						public void onItemClick(AdapterView parent, View v, int position, long id)
-						{
-							 try
-							 {
-								 JSONObject videoDetails=data1.getJSONObject(position);
-								 Intent i = new Intent(getActivity(), VideoDetails.class);
-								 i.putExtra("video_Details",videoDetails.toString());
-								 i.putExtra("ownerDetails",ownerList.get(position));
-								 i.putExtra("video_Thumb", Environment.getExternalStorageDirectory().toString()+"/.FidVids/"+videoDetails.getString("vid")+".jpg");
-								 startActivity(i);
-							 }
-							 catch(Exception e)
-							 {
-								 Log.e("Vidit_TAG","I got an error",e);
-							 }
-						 }
-					});
+					boolChk=true;
+					displayList();
 							
 				}
 				catch(Exception e)
@@ -459,7 +374,7 @@ public class LogFragment extends Fragment
 			
 	}
 	
-	public void showListRet()
+	public void displayList()
 	{
 		final ArrayList<String> ownerList=new ArrayList<String>();
 		int no=index;
@@ -482,9 +397,13 @@ public class LogFragment extends Fragment
 					String arr[]=new String[2];
 					arr[0]=getVidDetails.getString("thumbnail_link");
 					arr[1]=getVidDetails.getString("vid");
-					/*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+					//Checking the version of OS enviroment and performing multithreading task to download images
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && boolChk)
+					{
 						new DownloadImageTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,arr);
-					else*/
+						boolChk=false;
+					}
+					else
 						new DownloadImageTask().execute(arr);
 					
 				}
@@ -563,7 +482,7 @@ public class LogFragment extends Fragment
 		}
 		catch(Exception e)
 		{
-			
+			Log.e("Vidit_TAG","I got an error",e);
 		}
 	}
 	
