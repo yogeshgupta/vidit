@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="150dp"
             android:layout_marginTop="5dp"
-            android:textColor="#491A1A"
+            android:textColor="#1F17C6"
             android:textSize="14sp"
             android:typeface="monospace" 
             android:textStyle="bold"/>
