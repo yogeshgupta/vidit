@@ -9,4 +9,4 @@ Videos are categorised on the bases of upload and tags. Default view is of the v
 ##Download and Play
 
 User can download and play the video in high quality and standard quality format, these are the only two formats provided by facebook to the user. Videos are downloaded in mp4 format,support for more formats might be added in the future.Videos are saved in vidit folder in the gallery by the name of the video.
-This is the alpha version, and supports limited functionality like videos by friends and videos by you. Still have to add search functionality and tagged videos functionality.
+This is the alpha version, and supports limited functionality like videos by friends and videos by you. Currently working on the search.
