@@ -12,6 +12,7 @@ import org.json.*;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 
 import android.os.Build;
@@ -36,6 +37,11 @@ import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
 import com.vidit.R;
 
+interface OnDataPass 
+{
+    public void onDataPass(ArrayList<String> data);
+}
+
 public class LogFragment extends Fragment 
 {
 	
@@ -56,7 +62,16 @@ public class LogFragment extends Fragment
 	private JSONArray data1,ownerArray,frndsArray,myArray,taggedArray,ownFrry,ownTrry;
 	private JSONObject json;
 	private List<HashMap<String,String>> vidDetList;
+	private ArrayList<String> passJson;
 	private ArrayList<String> imageUrl=new ArrayList<String>();
+	OnDataPass dataPasser;
+	
+	@Override
+	public void onAttach(Activity a) 
+	{
+	    super.onAttach(a);
+	    dataPasser = (OnDataPass) a;
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) 
@@ -292,6 +307,8 @@ public class LogFragment extends Fragment
 			Log.e("Vidit_TAG","I got an error",e);
 		}
 		
+		
+		
 	}
 	
 	//To display the list of videos by category
@@ -456,8 +473,12 @@ public class LogFragment extends Fragment
 			getActivity().sendBroadcast(new Intent(
 				Intent.ACTION_MEDIA_MOUNTED,
 			            Uri.parse("file://" + Environment.getExternalStorageDirectory())));
-		    	
-				
+			
+			passJson=new ArrayList<String>();
+			passJson.add(frndsArray.toString());
+			passJson.add(ownFrry.toString());
+			passData(passJson);
+			
 			listView.setOnItemClickListener(new OnItemClickListener() 
 			{
 					
@@ -468,6 +489,7 @@ public class LogFragment extends Fragment
 					 {
 						 JSONObject videoDetails=data1.getJSONObject(position);
 						 Intent i = new Intent(getActivity(), VideoDetails.class);
+						 i.putExtra("extra", passJson);
 						 i.putExtra("video_Details",videoDetails.toString());
 						 i.putExtra("ownerDetails",ownerList.get(position));
 						 i.putExtra("video_Thumb", Environment.getExternalStorageDirectory().toString()+"/.FidVids/"+videoDetails.getString("vid")+".jpg");
@@ -484,6 +506,7 @@ public class LogFragment extends Fragment
 		{
 			Log.e("Vidit_TAG","I got an error",e);
 		}
+		
 	}
 	
 	public static int nthOccurrence(String str, char c, int n) 
@@ -543,6 +566,11 @@ public class LogFragment extends Fragment
 	    	}
 			return null;
 	    }
+	}
+	
+	public void passData(ArrayList<String> data) 
+	{
+	    dataPasser.onDataPass(data);
 	}
 	
 }

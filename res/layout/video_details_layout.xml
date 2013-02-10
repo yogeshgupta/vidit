@@ -99,9 +99,9 @@
     
 	<VideoView
         android:id="@+id/vvPlay"
-        android:layout_width="wrap_content"
-        android:layout_height="140dp"
-        android:layout_marginLeft="60dp"
+        android:layout_width="220dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:keepScreenOn="true" />
     

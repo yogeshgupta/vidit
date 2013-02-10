@@ -1,42 +1,58 @@
 package com.vidit;
 
-
-
-
 import java.io.File;
+import java.util.ArrayList;
+
+import org.json.JSONArray;
+
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.net.*;
 
 import com.facebook.*;
 import com.vidit.R;
 
-public class MainActivity extends FacebookActivity {
+public class MainActivity extends FacebookActivity implements OnDataPass{
 	
 	private Fragment loginFragment;
 	private boolean isResumed=false;
 	private Session session;
 	private MenuItem logInOut;
 	private SessionState sessionState;
+	private ArrayList<String> fragData;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		if(savedInstanceState==null)
+		if(isOnline())
 		{
-			loginFragment=new LogFragment();
-			getSupportFragmentManager().beginTransaction()
-			.add(android.R.id.content, loginFragment).commit();
+			if(savedInstanceState==null)
+			{
+				loginFragment=new LogFragment();
+				getSupportFragmentManager().beginTransaction()
+				.add(android.R.id.content, loginFragment).commit();
+				setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
+			}
+			else
+			{
+				loginFragment=(LogFragment)getSupportFragmentManager()
+						.findFragmentById(android.R.id.content);
+			}
 		}
 		else
 		{
-			loginFragment=(LogFragment)getSupportFragmentManager()
-					.findFragmentById(android.R.id.content);
-			
+			new AlertDialog.Builder(this)
+			.setTitle("Error")
+			.setMessage("No internet connection found");
 		}
+			
 	}
 
 	@Override
@@ -64,6 +80,10 @@ public class MainActivity extends FacebookActivity {
         		
         	case R.id.exit:
         		this.finish();
+        		return true;
+        		
+        	case R.id.search:
+        		onSearchRequested();
         		return true;
         		
         	default:
@@ -108,6 +128,21 @@ public class MainActivity extends FacebookActivity {
 	    }
 	}
 	
+	@Override
+    public boolean onSearchRequested() {
+    	Bundle bundle=new Bundle();
+		bundle.putStringArrayList("extra", fragData);
+		// search initial query
+		startSearch(null, false, bundle, false);
+		return true;
+    }
+	
+	@Override
+	public void onDataPass(ArrayList<String> data) 
+	{
+	    fragData=data;
+	}
+	
 	/*@Override
 	protected void onStop()
 	{
@@ -135,6 +170,15 @@ public class MainActivity extends FacebookActivity {
 	    }
 	    return( path.delete() );
 	  }*/
+	
+	public boolean isOnline() {
+	    ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+	    if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+	        return true;
+	    }
+	    return false;
+	}
 }
 
 

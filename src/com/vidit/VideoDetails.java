@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,6 +25,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -47,6 +49,7 @@ public class VideoDetails extends Activity {
 	private String title,vid;
 	private VideoView fbVideo;
 	private Context context;
+	//private ArrayList<String> jsonArrayList;
 	public static final int DIALOG_DOWNLOAD_PROGRESS = 0;
 	private ProgressDialog mProgressDialog;
 
@@ -74,6 +77,8 @@ public class VideoDetails extends Activity {
 		btnDownloadHQ=(Button)findViewById(R.id.btnDownloadHQ);
 		btnPlayHQ=(Button)findViewById(R.id.btnPlayHQ);
 		fbVideo=(VideoView)findViewById(R.id.vvPlay);
+		//jsonArrayList=new ArrayList<String>();
+		//jsonArrayList=getIntent().getStringArrayListExtra("passJson");
 		try
 		{
 			title=jsonObj.getString("title");
@@ -99,6 +104,8 @@ public class VideoDetails extends Activity {
 		{
 			Log.e("Vidit_TAG","I got an error",e);
 		}
+		
+		setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 		
 		//To Download low quality videos
 		btnDownloadLQ.setOnClickListener(new OnClickListener() {
@@ -130,7 +137,10 @@ public class VideoDetails extends Activity {
 			{
 				try
 				{
-					new DownloadVideoTask().execute(jsonObj.getString("src_hq"));
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+						new DownloadVideoTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,jsonObj.getString("src_hq"));
+					else
+						new DownloadVideoTask().execute(jsonObj.getString("src_hq"));
 					
 				}
 				catch(Exception e)
@@ -293,5 +303,14 @@ public class VideoDetails extends Activity {
             default:
                 return null;
         }
+    }
+	
+	@Override
+	public boolean onSearchRequested() {
+    	Bundle bundle1=new Bundle();
+		bundle1.putStringArrayList("extra", getIntent().getStringArrayListExtra("extra"));
+		// search initial query
+		startSearch(null, false, bundle1, false);
+		return true;
     }
 }

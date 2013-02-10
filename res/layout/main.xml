@@ -28,7 +28,7 @@
         
         <Button
     android:id="@+id/btnTaggedVideo"
-    android:layout_width="147dp"
+    android:layout_width="match_parent"
     android:layout_height="40dp"
     android:textSize="12sp"
     android:text="@string/strTagVideos"
