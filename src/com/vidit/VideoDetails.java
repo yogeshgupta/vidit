@@ -30,6 +30,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -312,5 +313,28 @@ public class VideoDetails extends Activity {
 		// search initial query
 		startSearch(null, false, bundle1, false);
 		return true;
+    }
+	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+ 
+        switch (item.getItemId())
+        {
+        	/*case R.id.log_out:
+        		this.session.closeAndClearTokenInformation();
+        		return true;*/
+        		
+        	case R.id.exit:
+        		this.finish();
+        		return true;
+        		
+        	case R.id.search:
+        		onSearchRequested();
+        		return true;
+        		
+        	default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
