@@ -52,8 +52,7 @@ public class VideoDetails extends Activity {
 	private String title,vid;
 	private VideoView fbVideo;
 	private Context context;
-	//private ArrayList<String> jsonArrayList;
-	public static final int DIALOG_DOWNLOAD_PROGRESS = 0;
+	DownloadVideoTask dvTask=new DownloadVideoTask();
 	private ProgressDialog mProgressDialog;
 
 	@Override
@@ -111,6 +110,7 @@ public class VideoDetails extends Activity {
 			    @Override
 			    public void onClick(DialogInterface dialog, int which) {
 			        dialog.dismiss();
+			        dvTask.cancel(true);
 			    }
 			});
 			mProgressDialog.setMax(100);
@@ -133,9 +133,9 @@ public class VideoDetails extends Activity {
 				{
 					//Checking the version of OS enviroment and performing multithreading task to download videos
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-						new DownloadVideoTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,jsonObj.getString("src"));
+						dvTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,jsonObj.getString("src"));
 					else
-						new DownloadVideoTask().execute(jsonObj.getString("src"));
+						dvTask.execute(jsonObj.getString("src"));
 					
 				}
 				catch(Exception e)
