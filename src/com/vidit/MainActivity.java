@@ -9,9 +9,12 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.*;
 
 import com.facebook.*;
@@ -31,6 +34,20 @@ public class MainActivity extends FacebookActivity implements OnDataPass{
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		AlertDialog startAlert= new AlertDialog.Builder(this)
+	      .setMessage("This is a data extensive app, if you are downloading or playing a video" +
+	      		" we suggest you to connect to a wireless network to avoid exhausting your data plan.")
+	      .setTitle("Vidit Message")
+	      .setCancelable(true)
+	      .setNeutralButton(android.R.string.ok,
+	         new DialogInterface.OnClickListener() {
+	         public void onClick(DialogInterface dialog, int whichButton){}
+	         })
+	      .show();
+		TextView alertTextMsg = (TextView) startAlert.findViewById(android.R.id.message);
+		alertTextMsg.setTextSize(12);
+		
 		if(isOnline())
 		{
 			if(savedInstanceState==null)
@@ -65,13 +82,14 @@ public class MainActivity extends FacebookActivity implements OnDataPass{
 		else
 			logInOut.setVisible(true);*/
 		getMenuInflater().inflate(R.menu.vidit_menu, menu);
+		
 		return true;
 	}
 	
 	@Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
- 
+		
         switch (item.getItemId())
         {
         	case R.id.log_out:
@@ -171,7 +189,8 @@ public class MainActivity extends FacebookActivity implements OnDataPass{
 	    return( path.delete() );
 	  }*/
 	
-	public boolean isOnline() {
+	public boolean isOnline() 
+	{
 	    ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
 	    if (netInfo != null && netInfo.isConnectedOrConnecting()) {

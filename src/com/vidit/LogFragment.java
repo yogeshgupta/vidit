@@ -10,13 +10,12 @@ import java.text.*;
 import org.json.*;
 
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 
 import android.os.Build;
-//import android.os.AsyncTask;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
@@ -464,7 +463,7 @@ public class LogFragment extends Fragment
 				hm.put("owner","Owner : " +firstName+" "+lastName );
 				vidDetList.add(hm);
 			}
-			
+			Log.d("cnt", Integer.toString(vidDetList.size()));
 			String[] itemControl = {"videoThumb","title","creationDate","owner"};
 			int[] itemLayout={R.id.videoThumb,R.id.title,R.id.creationDate,R.id.owner};
 			SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), vidDetList, R.layout.listvideos_layout, itemControl, itemLayout);
@@ -520,6 +519,7 @@ public class LogFragment extends Fragment
 	//Class to Get the images for video
 	private class DownloadImageTask extends AsyncTask<String, Void, Void> 
 	{
+		@Override
 	    protected Void doInBackground(String... urls) 
 	    {
 	    	try

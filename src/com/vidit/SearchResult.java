@@ -190,7 +190,7 @@ public class SearchResult extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.vidit_menu, menu);
+		getMenuInflater().inflate(R.menu.vidit_menu2, menu);
 		return true;
 	}
 	
@@ -209,9 +209,9 @@ public class SearchResult extends Activity {
  
         switch (item.getItemId())
         {
-        	/*case R.id.log_out:
-        		this.session.closeAndClearTokenInformation();
-        		return true;*/
+        	case R.id.home:
+        		startActivity(new Intent(SearchResult.this,MainActivity.class));
+        		return true;
         		
         	case R.id.exit:
         		this.finish();

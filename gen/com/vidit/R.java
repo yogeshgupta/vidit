@@ -205,6 +205,7 @@ containing a value of this type.
         public static final int com_facebook_top_background=0x7f02001e;
         public static final int com_facebook_top_button=0x7f02001f;
         public static final int ic_launcher=0x7f020020;
+        public static final int ic_search=0x7f020021;
     }
     public static final class id {
         public static final int aboutVidit=0x7f050031;
@@ -237,6 +238,7 @@ containing a value of this type.
         public static final int exit=0x7f050032;
         public static final int fbPic=0x7f050022;
         public static final int fragment_container=0x7f050003;
+        public static final int home=0x7f050033;
         public static final int imgVideoThumbnail=0x7f050026;
         public static final int large=0x7f050002;
         public static final int log_out=0x7f050030;
@@ -280,9 +282,10 @@ containing a value of this type.
     }
     public static final class menu {
         public static final int vidit_menu=0x7f0a0000;
+        public static final int vidit_menu2=0x7f0a0001;
     }
     public static final class string {
-        public static final int abtVidit=0x7f060017;
+        public static final int abtVidit=0x7f060018;
         public static final int app_id=0x7f060013;
         public static final int app_name=0x7f060012;
         public static final int com_facebook_choose_friends=0x7f06000f;
@@ -303,15 +306,16 @@ containing a value of this type.
         public static final int com_facebook_placepicker_subtitle_catetory_only_format=0x7f06000c;
         public static final int com_facebook_placepicker_subtitle_format=0x7f06000b;
         public static final int com_facebook_placepicker_subtitle_were_here_only_format=0x7f06000d;
-        public static final int exit=0x7f060016;
+        public static final int exit=0x7f060017;
+        public static final int home=0x7f060015;
         public static final int logout=0x7f060014;
-        public static final int search=0x7f060015;
-        public static final int search_hint=0x7f060018;
-        public static final int strFrndsVideos=0x7f06001a;
-        public static final int strMyVideos=0x7f06001b;
-        public static final int strTagVideos=0x7f06001c;
-        public static final int title_activity_search_result=0x7f06001d;
-        public static final int title_activity_video_details=0x7f060019;
+        public static final int search=0x7f060016;
+        public static final int search_hint=0x7f060019;
+        public static final int strFrndsVideos=0x7f06001b;
+        public static final int strMyVideos=0x7f06001c;
+        public static final int strTagVideos=0x7f06001d;
+        public static final int title_activity_search_result=0x7f06001e;
+        public static final int title_activity_video_details=0x7f06001a;
     }
     public static final class style {
         /** 

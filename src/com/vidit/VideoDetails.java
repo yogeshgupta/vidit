@@ -1,10 +1,12 @@
 package com.vidit;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -100,13 +102,26 @@ public class VideoDetails extends Activity {
 			tvOwner.setText("Owner: "+getIntent().getStringExtra("ownerDetails"));
 			Bitmap bmp = BitmapFactory.decodeFile(strThumbLink);
 			imgThumbnail.setImageBitmap(bmp);
+			setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
+			mProgressDialog = new ProgressDialog(VideoDetails.this);
+			mProgressDialog.setMessage("Downloading "+title);
+			mProgressDialog.setIndeterminate(false);
+			mProgressDialog.setCancelable(false);
+			mProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+			    @Override
+			    public void onClick(DialogInterface dialog, int which) {
+			        dialog.dismiss();
+			    }
+			});
+			mProgressDialog.setMax(100);
+			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		}
 		catch(Exception e)
 		{
 			Log.e("Vidit_TAG","I got an error",e);
 		}
 		
-		setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
+		
 		
 		//To Download low quality videos
 		btnDownloadLQ.setOnClickListener(new OnClickListener() {
@@ -199,83 +214,72 @@ public class VideoDetails extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.vidit_menu, menu);
+		getMenuInflater().inflate(R.menu.vidit_menu2, menu);
 		return true;
 	}
 	
 	//Video Download async method
-	private class DownloadVideoTask extends AsyncTask<String, String, String> 
+	private class DownloadVideoTask extends AsyncTask<String, Integer, String> 
 	{
 		
-		@SuppressWarnings("deprecation")
-		@Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            showDialog(DIALOG_DOWNLOAD_PROGRESS);
-        }
 		
-	    protected String doInBackground(String... urls) 
-	    {
-	    	int i=0;
-	    	try
-	    	{
-	    		URL url = new URL (urls[0]);
-	    		InputStream input = url.openStream();
-	    	
-	    		try {
-	    			//The sdcard directory e.g. '/sdcard' can be used directly, or 
-	    			//more safely abstracted with getExternalStorageDirectory()
-	    			String root = Environment.getExternalStorageDirectory().toString();
+		@Override
+	    protected void onPreExecute() {
+	        super.onPreExecute();
+	        mProgressDialog.show();
+	    }
+		
+		 @Override
+		    protected String doInBackground(String... sUrl) {
+		        try {
+		            URL url = new URL(sUrl[0]);
+		            URLConnection connection = url.openConnection();
+		            connection.connect();
+		            // this will be useful so that you can show a typical 0-100% progress bar
+		            int fileLength = connection.getContentLength();
+
+		            // download the file
+		            InputStream input = new BufferedInputStream(url.openStream());
+		            String root = Environment.getExternalStorageDirectory().toString();
 	    			File storagePath = new File(root + "/vidit");    
 	    			storagePath.mkdirs();
 	    			if(title=="Untitled")
 	    				title+="_"+vid;
 	    			OutputStream output = new FileOutputStream (new File(storagePath,title+".mp4"));
-	    			try 
-	    			{
-	    				byte[] buffer = new byte[1024];
-	    				int bytesRead = 0;
-	    				while ((bytesRead = input.read(buffer, 0, buffer.length)) >= 0) 
-	    				{
-	    					output.write(buffer, 0, bytesRead);
-	    				}
-	    	    	}
-	    			catch(Exception e)
-	    			{	
-	    				Log.e("Vidit_TAG","I got an error",e);
-	    			}
-	    			finally 
-	    			{
-	    				output.close();
-	    			}
-	    		}
-	    		catch(Exception e)
-	    		{
-	    			Log.e("Vidit_TAG","I got an error",e);
-	    		}
-	    		finally 
-	    		{
-	    			input.close();
-	    			//tvTitle.setText("Completed");
-	    		}
-	    		
-	    	}
-	    	catch(Exception e)
-	    	{
-	    		Log.e("Vidit_TAG","I got an error",e);
-	    	}
-	    	
-			return null;
+
+		            byte data[] = new byte[1024];
+		            long total = 0;
+		            int count;
+		            while ((count = input.read(data)) != -1) {
+		                total += count;
+		                // publishing the progress....
+		                publishProgress((int) (total * 100 / fileLength));
+		                output.write(data, 0, count);
+		            }
+
+		            output.flush();
+		            output.close();
+		            input.close();
+		        } catch (Exception e) {
+		        }
+		        return null;
+		    }
+	    
+	    
+	    
+		@Override
+	    protected void onProgressUpdate(Integer... progress) {
+	        super.onProgressUpdate(progress);
+	        mProgressDialog.setProgress(progress[0]);
 	    }
 	    
-	    
-	    @SuppressWarnings("deprecation")
+		
 		@Override
-        protected void onPostExecute(String unused) 
-	    {
-	    	dismissDialog(DIALOG_DOWNLOAD_PROGRESS);
-	    	alertbox(title);
-        }
+		protected void onPostExecute(String unused)
+		{
+			mProgressDialog.dismiss();
+			alertbox(title);
+		}
 	}
 	
 	protected void alertbox(String msgTitle)
@@ -291,7 +295,7 @@ public class VideoDetails extends Activity {
 	      .show();
 	   }
 	
-	@Override
+	/*@Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case DIALOG_DOWNLOAD_PROGRESS:
@@ -304,7 +308,7 @@ public class VideoDetails extends Activity {
             default:
                 return null;
         }
-    }
+    }*/
 	
 	@Override
 	public boolean onSearchRequested() {
@@ -321,9 +325,9 @@ public class VideoDetails extends Activity {
  
         switch (item.getItemId())
         {
-        	/*case R.id.log_out:
-        		this.session.closeAndClearTokenInformation();
-        		return true;*/
+        	case R.id.home:
+    		startActivity(new Intent(VideoDetails.this,MainActivity.class));
+    		return true;
         		
         	case R.id.exit:
         		this.finish();
