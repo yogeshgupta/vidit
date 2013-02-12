@@ -6,13 +6,18 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 
 import android.support.v4.app.Fragment;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.SearchView;
 import android.widget.TextView;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.*;
@@ -72,6 +77,7 @@ public class MainActivity extends FacebookActivity implements OnDataPass{
 			
 	}
 
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
 	{
@@ -82,6 +88,23 @@ public class MainActivity extends FacebookActivity implements OnDataPass{
 		else
 			logInOut.setVisible(true);*/
 		getMenuInflater().inflate(R.menu.vidit_menu, menu);
+		try
+		{
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) 
+			{
+		        SearchManager searchManager =
+		                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		        SearchView searchView =
+		                (SearchView) menu.findItem(R.id.searche).getActionView();
+		        searchView.setSearchableInfo(
+		                searchManager.getSearchableInfo(getComponentName()));
+		        searchView.setIconifiedByDefault(false);
+		    }
+		}
+		catch(Exception e)
+		{
+			Log.e("Vidit_TAG","I got an error",e);
+		}
 		
 		return true;
 	}

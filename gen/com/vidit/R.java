@@ -208,7 +208,7 @@ containing a value of this type.
         public static final int ic_search=0x7f020021;
     }
     public static final class id {
-        public static final int aboutVidit=0x7f050031;
+        public static final int aboutVidit=0x7f050032;
         public static final int btnDownloadHQ=0x7f05002d;
         public static final int btnDownloadLQ=0x7f05002b;
         public static final int btnPlayHQ=0x7f05002c;
@@ -235,21 +235,22 @@ containing a value of this type.
         public static final int com_facebook_picker_top_bar=0x7f050012;
         public static final int com_facebook_placepickerfragment_search_box_stub=0x7f050017;
         public static final int creationDate=0x7f05001c;
-        public static final int exit=0x7f050032;
+        public static final int exit=0x7f050033;
         public static final int fbPic=0x7f050022;
         public static final int fragment_container=0x7f050003;
-        public static final int home=0x7f050033;
+        public static final int home=0x7f050034;
         public static final int imgVideoThumbnail=0x7f050026;
         public static final int large=0x7f050002;
-        public static final int log_out=0x7f050030;
+        public static final int log_out=0x7f050031;
         public static final int loginButton=0x7f050023;
         public static final int lstVideoSearch=0x7f050005;
         public static final int lstViewVideo=0x7f050024;
         public static final int normal=0x7f050001;
         public static final int owner=0x7f05001d;
         public static final int picker_subtitle=0x7f050019;
-        public static final int search=0x7f05002f;
+        public static final int search=0x7f050030;
         public static final int search_box=0x7f050018;
+        public static final int searche=0x7f05002f;
         public static final int shwMsg=0x7f050004;
         public static final int small=0x7f050000;
         public static final int title=0x7f05001b;
