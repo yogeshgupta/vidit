@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <item android:id="@+id/search"
+    <item android:id="@+id/searche"
           android:title="@string/search"
           android:icon="@drawable/ic_search"
           android:showAsAction="collapseActionView|ifRoom"

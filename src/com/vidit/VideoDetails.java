@@ -10,6 +10,7 @@ import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,10 +25,14 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -38,6 +43,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.VideoView;
 import com.vidit.R;
@@ -52,8 +58,8 @@ public class VideoDetails extends Activity {
 	private String title,vid;
 	private VideoView fbVideo;
 	private Context context;
-	DownloadVideoTask dvTask=new DownloadVideoTask();
-	private ProgressDialog mProgressDialog;
+/*	DownloadVideoTask dvTask=new DownloadVideoTask();
+	private ProgressDialog mProgressDialog;*/
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +108,7 @@ public class VideoDetails extends Activity {
 			Bitmap bmp = BitmapFactory.decodeFile(strThumbLink);
 			imgThumbnail.setImageBitmap(bmp);
 			setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
-			mProgressDialog = new ProgressDialog(VideoDetails.this);
+			/*mProgressDialog = new ProgressDialog(VideoDetails.this);
 			mProgressDialog.setMessage("Downloading "+title);
 			mProgressDialog.setIndeterminate(false);
 			mProgressDialog.setCancelable(false);
@@ -114,7 +120,7 @@ public class VideoDetails extends Activity {
 			    }
 			});
 			mProgressDialog.setMax(100);
-			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);*/
 		}
 		catch(Exception e)
 		{
@@ -131,11 +137,23 @@ public class VideoDetails extends Activity {
 			{
 				try
 				{
-					//Checking the version of OS enviroment and performing multithreading task to download videos
-					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-						dvTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,jsonObj.getString("src"));
-					else
-						dvTask.execute(jsonObj.getString("src"));
+					if(isDownloadManagerAvailable(context))
+					{
+						String url = jsonObj.getString("src");
+						DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+						request.setDescription("Downloading "+title);
+						request.setTitle(title+"_lq.mp4");
+						// in order for this if to run, you must use the android 3.2 to compile your app
+						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+						    request.allowScanningByMediaScanner();
+						    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+						}
+						request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, title+".mp4");
+
+						// get download service and enqueue file
+						DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+						manager.enqueue(request);
+					}
 					
 				}
 				catch(Exception e)
@@ -153,10 +171,23 @@ public class VideoDetails extends Activity {
 			{
 				try
 				{
-					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-						new DownloadVideoTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,jsonObj.getString("src_hq"));
-					else
-						new DownloadVideoTask().execute(jsonObj.getString("src_hq"));
+					if(isDownloadManagerAvailable(context))
+					{
+						String url = jsonObj.getString("src_hq");
+						DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+						request.setDescription("Downloading "+title);
+						request.setTitle(title+"_hq.mp4");
+						// in order for this if to run, you must use the android 3.2 to compile your app
+						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+						    request.allowScanningByMediaScanner();
+						    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+						}
+						request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, title+".mp4");
+
+						// get download service and enqueue file
+						DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+						manager.enqueue(request);
+					}
 					
 				}
 				catch(Exception e)
@@ -215,10 +246,51 @@ public class VideoDetails extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.vidit_menu2, menu);
+		
+		try
+		{
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) 
+			{
+		        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		        SearchView searchView = (SearchView) menu.findItem(R.id.searche).getActionView();
+		        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() 
+		        {
+		            @Override
+		            public boolean onQueryTextSubmit(String query) {
+		              startSearch(query);
+		              return true;
+		            }
+
+		            @Override
+		            public boolean onQueryTextChange(final String s) {
+		              return false;
+		            }
+		         });
+		        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+		        searchView.setIconifiedByDefault(false);
+		       
+		    }
+		}
+		catch(Exception e)
+		{
+			Log.e("Vidit_TAG","I got an error",e);
+		}
+		
 		return true;
 	}
 	
-	//Video Download async method
+	private void startSearch(final String query) 
+	  {
+	    // Doesn't call through onSearchRequest
+	    Intent intent = new Intent(this, SearchResult.class);
+	    intent.putExtra("Query", query);
+	    Bundle bundle=new Bundle();
+	    bundle.putStringArrayList("extra", getIntent().getStringArrayListExtra("extra"));
+		intent.putExtras(bundle);
+	    startActivity(intent);
+	  }
+	
+/*	//Video Download async method
 	private class DownloadVideoTask extends AsyncTask<String, Integer, String> 
 	{
 		
@@ -295,7 +367,7 @@ public class VideoDetails extends Activity {
 	      .show();
 	   }
 	
-	/*@Override
+	@Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case DIALOG_DOWNLOAD_PROGRESS:
@@ -341,4 +413,20 @@ public class VideoDetails extends Activity {
                 return super.onOptionsItemSelected(item);
         }
     }
+	
+	public static boolean isDownloadManagerAvailable(Context context) {
+	    try {
+	        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) {
+	            return false;
+	        }
+	        Intent intent = new Intent(Intent.ACTION_MAIN);
+	        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+	        intent.setClassName("com.android.providers.downloads.ui", "com.android.providers.downloads.ui.DownloadList");
+	        List<ResolveInfo> list = context.getPackageManager().queryIntentActivities(intent,
+	                PackageManager.MATCH_DEFAULT_ONLY);
+	        return list.size() > 0;
+	    } catch (Exception e) {
+	        return false;
+	    }
+	}
 }

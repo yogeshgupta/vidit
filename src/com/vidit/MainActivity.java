@@ -20,6 +20,7 @@ import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.*;
 
 import com.facebook.*;
@@ -92,13 +93,24 @@ public class MainActivity extends FacebookActivity implements OnDataPass{
 		{
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) 
 			{
-		        SearchManager searchManager =
-		                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-		        SearchView searchView =
-		                (SearchView) menu.findItem(R.id.searche).getActionView();
-		        searchView.setSearchableInfo(
-		                searchManager.getSearchableInfo(getComponentName()));
+		        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		        SearchView searchView = (SearchView) menu.findItem(R.id.searche).getActionView();
+		        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() 
+		        {
+		            @Override
+		            public boolean onQueryTextSubmit(String query) {
+		              startSearch(query);
+		              return true;
+		            }
+
+		            @Override
+		            public boolean onQueryTextChange(final String s) {
+		              return false;
+		            }
+		         });
+		        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 		        searchView.setIconifiedByDefault(false);
+		       
 		    }
 		}
 		catch(Exception e)
@@ -108,6 +120,18 @@ public class MainActivity extends FacebookActivity implements OnDataPass{
 		
 		return true;
 	}
+	
+
+	  private void startSearch(final String query) 
+	  {
+	    // Doesn't call through onSearchRequest
+	    Intent intent = new Intent(this, SearchResult.class);
+	    intent.putExtra("Query", query);
+	    Bundle bundle=new Bundle();
+		bundle.putStringArrayList("extra", fragData);
+		intent.putExtras(bundle);
+	    startActivity(intent);
+	  }
 	
 	@Override
     public boolean onOptionsItemSelected(MenuItem item)

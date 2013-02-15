@@ -11,11 +11,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.opengl.Visibility;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
@@ -23,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -56,10 +59,17 @@ public class SearchResult extends Activity {
 		{
 			
 			Intent intent=getIntent();
-			if(intent.ACTION_SEARCH.equals(intent.getAction()))
+			if (intent.getStringExtra(SearchManager.QUERY)==null)
 			{
-				query=intent.getStringExtra(SearchManager.QUERY);
-				
+				query=intent.getExtras().getString("Query");
+			}
+			else
+			{
+				if(intent.ACTION_SEARCH.equals(intent.getAction()))
+				{
+					query=intent.getStringExtra(SearchManager.QUERY);
+					
+				}
 			}
 			
 		}
@@ -71,8 +81,15 @@ public class SearchResult extends Activity {
 		
 		try 
 		{
-			Bundle bundle=getIntent().getBundleExtra(SearchManager.APP_DATA);
-			jsonArrayList=bundle.getStringArrayList("extra");
+			if (getIntent().getBundleExtra(SearchManager.APP_DATA)==null)
+			{
+				jsonArrayList=getIntent().getExtras().getStringArrayList("extra");
+			}
+			else
+			{
+				Bundle bundle=getIntent().getBundleExtra(SearchManager.APP_DATA);
+				jsonArrayList=bundle.getStringArrayList("extra");
+			}
 			final JSONArray js=new JSONArray(jsonArrayList.get(0));
 			JSONArray js1=new JSONArray(jsonArrayList.get(1));
 			final HashMap<String, String> hm1 = new HashMap<String,String>();
@@ -191,8 +208,49 @@ public class SearchResult extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.vidit_menu2, menu);
+		
+		try
+		{
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) 
+			{
+		        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		        SearchView searchView = (SearchView) menu.findItem(R.id.searche).getActionView();
+		        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() 
+		        {
+		            @Override
+		            public boolean onQueryTextSubmit(String query) {
+		              startSearch(query);
+		              return true;
+		            }
+
+		            @Override
+		            public boolean onQueryTextChange(final String s) {
+		              return false;
+		            }
+		         });
+		        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+		        searchView.setIconifiedByDefault(false);
+		       
+		    }
+		}
+		catch(Exception e)
+		{
+			Log.e("Vidit_TAG","I got an error",e);
+		}
+		
 		return true;
 	}
+	
+	private void startSearch(final String query) 
+	  {
+	    // Doesn't call through onSearchRequest
+	    Intent intent = new Intent(this, SearchResult.class);
+	    intent.putExtra("Query", query);
+	    Bundle bundle=new Bundle();
+	    bundle.putStringArrayList("extra", jsonArrayList);
+		intent.putExtras(bundle);
+	    startActivity(intent);
+	  }
 	
 	public boolean searchString(String a, String b) 
 	{
