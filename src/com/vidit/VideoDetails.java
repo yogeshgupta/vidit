@@ -35,6 +35,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,8 +59,8 @@ public class VideoDetails extends Activity {
 	private String title,vid;
 	private VideoView fbVideo;
 	private Context context;
-/*	DownloadVideoTask dvTask=new DownloadVideoTask();
-	private ProgressDialog mProgressDialog;*/
+	DownloadVideoTask dvTask=new DownloadVideoTask();
+	private ProgressDialog mProgressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -107,8 +108,9 @@ public class VideoDetails extends Activity {
 			tvOwner.setText("Owner: "+getIntent().getStringExtra("ownerDetails"));
 			Bitmap bmp = BitmapFactory.decodeFile(strThumbLink);
 			imgThumbnail.setImageBitmap(bmp);
+			
 			setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
-			/*mProgressDialog = new ProgressDialog(VideoDetails.this);
+			mProgressDialog = new ProgressDialog(VideoDetails.this);
 			mProgressDialog.setMessage("Downloading "+title);
 			mProgressDialog.setIndeterminate(false);
 			mProgressDialog.setCancelable(false);
@@ -120,7 +122,7 @@ public class VideoDetails extends Activity {
 			    }
 			});
 			mProgressDialog.setMax(100);
-			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);*/
+			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		}
 		catch(Exception e)
 		{
@@ -153,6 +155,13 @@ public class VideoDetails extends Activity {
 						// get download service and enqueue file
 						DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
 						manager.enqueue(request);
+					}
+					else
+					{
+						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+							dvTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,jsonObj.getString("src"));
+							else
+							dvTask.execute(jsonObj.getString("src"));
 					}
 					
 				}
@@ -188,6 +197,13 @@ public class VideoDetails extends Activity {
 						DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
 						manager.enqueue(request);
 					}
+					else
+					{
+						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+							dvTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,jsonObj.getString("src_hq"));
+							else
+							dvTask.execute(jsonObj.getString("src_hq"));
+					}
 					
 				}
 				catch(Exception e)
@@ -206,6 +222,7 @@ public class VideoDetails extends Activity {
 				try
 				{
 					Uri uri=Uri.parse(jsonObj.getString("src"));
+					fbVideo.setBackgroundColor(Color.TRANSPARENT);
 					fbVideo.setVideoURI(uri);
 				    fbVideo.setMediaController(new MediaController(context));
 				    fbVideo.requestFocus();
@@ -228,6 +245,7 @@ public class VideoDetails extends Activity {
 				try
 				{
 					Uri uri=Uri.parse(jsonObj.getString("src_hq"));
+					fbVideo.setBackgroundColor(Color.TRANSPARENT);
 					fbVideo.setVideoURI(uri);
 				    fbVideo.setMediaController(new MediaController(context));
 				    fbVideo.requestFocus();
@@ -290,7 +308,7 @@ public class VideoDetails extends Activity {
 	    startActivity(intent);
 	  }
 	
-/*	//Video Download async method
+	//Video Download async method
 	private class DownloadVideoTask extends AsyncTask<String, Integer, String> 
 	{
 		
@@ -367,7 +385,7 @@ public class VideoDetails extends Activity {
 	      .show();
 	   }
 	
-	@Override
+/*	@Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case DIALOG_DOWNLOAD_PROGRESS:

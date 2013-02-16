@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="#000000" >
+    android:background="#3F4142" >
 
     <TextView
         android:id="@+id/tvTitle"
@@ -103,6 +103,7 @@
         android:layout_height="200dp"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:keepScreenOn="true" />
+        android:keepScreenOn="true"
+        android:background="#3F4142" />
     
 </LinearLayout>

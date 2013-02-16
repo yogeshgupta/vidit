@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 
 import android.os.Build;
 import android.os.AsyncTask;
@@ -174,11 +175,12 @@ public class LogFragment extends Fragment
 					@Override
 					public void onClick(View arg0) 
 					{
-						btnFriendsVideos.setText("Video By Friends");
-						btnTaggedVideos.setText("Tagged Videos");
-						SpannableString content = new SpannableString("My Videos");
+						btnMyVideos.setBackgroundColor(Color.parseColor("#1D1B20"));
+						btnTaggedVideos.setBackgroundColor(Color.parseColor("#3F4142"));
+						btnFriendsVideos.setBackgroundColor(Color.parseColor("#3F4142"));
+						/*SpannableString content = new SpannableString("My Videos");
 						content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-						btnMyVideos.setText(content);
+						btnMyVideos.setText(content);*/
 						//Checking if switch is from another tab
 						if(index!=1)
 						{
@@ -211,11 +213,9 @@ public class LogFragment extends Fragment
 					@Override
 					public void onClick(View arg0) 
 					{
-						btnMyVideos.setText("My Videos");
-						btnTaggedVideos.setText("Tagged Videos");
-						SpannableString content = new SpannableString("Video By Friends");
-						content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-						btnFriendsVideos.setText(content);
+						btnFriendsVideos.setBackgroundColor(Color.parseColor("#1D1B20"));
+						btnTaggedVideos.setBackgroundColor(Color.parseColor("#3F4142"));
+						btnMyVideos.setBackgroundColor(Color.parseColor("#3F4142"));
 						
 						if(index!=2)
 						{
@@ -254,11 +254,9 @@ public class LogFragment extends Fragment
 					@Override
 					public void onClick(View arg0) 
 					{
-						btnMyVideos.setText("My Videos");
-						btnFriendsVideos.setText("Video By Friends");
-						SpannableString content = new SpannableString("Tagged Videos");
-						content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-						btnTaggedVideos.setText(content);
+						btnTaggedVideos.setBackgroundColor(Color.parseColor("#1D1B20"));
+						btnMyVideos.setBackgroundColor(Color.parseColor("#3F4142"));
+						btnFriendsVideos.setBackgroundColor(Color.parseColor("#3F4142"));
 						
 						if(index!=3)
 						{

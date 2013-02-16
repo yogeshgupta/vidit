@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="#000000" >
+    android:background="#3C363F" >
     
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -12,36 +12,45 @@
 
         <Button
     android:id="@+id/btnVideoByFriends"
-    android:layout_width="118.5dp"
-    android:layout_height="40dp"
+    android:layout_width="115.5dp"
+    android:layout_height="32dp"
     android:layout_marginLeft="-3dp"
-    android:textSize="12sp" 
+    android:layout_marginTop="3dp"
+    android:background="#1D1B20"
+    android:textSize="11sp" 
+    android:textColor="#465786"
     android:text="@string/strFrndsVideos" />
         
         <Button
     android:id="@+id/btnVideoByMe"
-    android:layout_width="wrap_content"
-    android:layout_height="40dp"
+    android:layout_width="90dp"
+    android:layout_height="32dp"
+    android:background="#3F4142"
     android:text="@string/strMyVideos"
-    android:textSize="12sp"
-    android:layout_marginLeft="107dp" />
+    android:textSize="11sp"
+    android:textColor="#465786"
+    android:layout_marginTop="3dp"
+    android:layout_marginLeft="112.5dp" />
         
         <Button
     android:id="@+id/btnTaggedVideo"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:textSize="12sp"
+    android:layout_height="32dp"
+    android:textSize="11sp"
     android:text="@string/strTagVideos"
-    android:layout_marginLeft="178dp"
-    android:layout_marginRight="-3dp" />
+    android:background="#3F4142"
+    android:layout_marginLeft="200dp"
+    android:textColor="#465786"
+    android:layout_marginTop="3dp"/>
         
     </RelativeLayout>
 
 
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#3C363F" >
 
         <TextView
             android:id="@+id/tvUserName"
@@ -49,9 +58,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="150dp"
             android:layout_marginTop="5dp"
-            android:textColor="#1F17C6"
+            android:textColor="#FFFFFF"
             android:textSize="14sp"
-            android:typeface="monospace" 
+            android:typeface="serif" 
             android:textStyle="bold"/>
 
         <com.facebook.widget.ProfilePictureView
@@ -76,6 +85,7 @@
         android:id="@+id/lstViewVideo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#3F4142"
         android:layout_marginTop="18dp"
     />
 
