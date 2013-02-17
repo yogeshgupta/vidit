@@ -12,7 +12,7 @@
             android:layout_gravity="fill_horizontal"
             android:textSize="15sp"
             android:layout_marginTop="18dp"
-            android:textColor="#A52A2A"
+            android:textColor="#465786"
         />
 <RelativeLayout
 	    android:layout_width="wrap_content"
@@ -36,7 +36,7 @@
         android:layout_toRightOf="@id/imgVideoThumbnail"
         android:layout_marginTop="5dp"
         android:textSize="12sp"
-        android:textColor="#D0F5A9"
+        android:textColor="#CEF6E3"
         />
     
     <TextView
@@ -46,7 +46,7 @@
         android:layout_below="@id/tvDateTime"
         android:layout_toRightOf="@id/imgVideoThumbnail"
         android:textSize="12sp"
-        android:textColor="#D0F5A9"
+        android:textColor="#CEF6E3"
         />
     
     <TextView
@@ -56,44 +56,52 @@
         android:layout_below="@id/tvLength"
         android:layout_toRightOf="@id/imgVideoThumbnail"
         android:textSize="12sp"
-        android:textColor="#D0F5A9"
+        android:textColor="#CEF6E3"
         />
     
     <Button
 	        android:id="@+id/btnPlayLQ"
-	        android:layout_width="wrap_content"
-	        android:layout_height="30dp"
-	        android:textSize="12sp"
+	        android:layout_width="53dp"
+	        android:layout_height="26dp"
+	        android:textSize="10sp"
+	        android:background="@drawable/btnshape"
 	        android:layout_below="@id/tvOwner"
+	        android:layout_margin="5dp"
 	        android:layout_toRightOf="@id/imgVideoThumbnail"
 	        android:text="Play LQ" />
 
 	    <Button
 	        android:id="@+id/btnDownloadLQ"
-	        android:layout_width="wrap_content"
-	        android:layout_height="30dp"
-	        android:textSize="12sp"
+	        android:layout_width="58dp"
+	        android:layout_height="26dp"
+	        android:textSize="10sp"
+	        android:background="@drawable/btnshape"
+	        android:layout_margin="5dp"
 	        android:layout_below="@id/tvOwner"
 	        android:layout_toRightOf="@id/btnPlayLQ"
-	        android:text="Download LQ" />
+	        android:text="Vidit LQ" />
 	    
 	    <Button
 	        android:id="@+id/btnPlayHQ"
-	        android:layout_width="wrap_content"
-	        android:layout_height="30dp"
-	        android:textSize="12sp"
+	       	android:layout_width="53dp"
+	        android:layout_height="26dp"
+	        android:textSize="10sp"
+	        android:background="@drawable/btnshape"
+	        android:layout_margin="5dp"
 	        android:layout_below="@id/btnPlayLQ"
 	        android:layout_toRightOf="@id/imgVideoThumbnail"
 	        android:text="Play HQ" />
 	    
 	    <Button
 	        android:id="@+id/btnDownloadHQ"
-	        android:layout_width="wrap_content"
-	        android:layout_height="30dp"
-	        android:textSize="12sp"
+	        android:layout_width="58dp"
+	        android:layout_height="26dp"
+	        android:textSize="10sp"
+	        android:background="@drawable/btnshape"
+	        android:layout_margin="5dp"
 	        android:layout_below="@id/btnDownloadLQ"
 	        android:layout_toRightOf="@id/btnPlayHQ"
-	        android:text="Download HQ" />
+	        android:text="Vidit HQ" />
 	    
     </RelativeLayout>
     

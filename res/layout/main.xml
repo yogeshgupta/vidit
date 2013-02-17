@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="#3C363F" >
+    android:background="#3F4142" >
     
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -49,8 +49,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#3C363F" >
+        android:layout_height="114dp"
+        android:background="@drawable/upback" >
 
         <TextView
             android:id="@+id/tvUserName"
@@ -72,21 +72,24 @@
             android:layout_marginTop="5dp"
             android:layout_marginLeft="20dp" >
         </com.facebook.widget.ProfilePictureView>
-    </RelativeLayout>
-    
-    <com.facebook.widget.LoginButton
+
+        <com.facebook.widget.LoginButton
             android:id="@+id/loginButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp" />
+            android:layout_width="120dp"
+            android:layout_height="30dp"
+            android:layout_margin="14dp"
+            android:layout_toLeftOf="@id/fbPic"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+        
+    </RelativeLayout>
     
     <ListView 
         android:id="@+id/lstViewVideo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#3F4142"
-        android:layout_marginTop="18dp"
+        android:layout_margin="0dp"
     />
 
 </LinearLayout>

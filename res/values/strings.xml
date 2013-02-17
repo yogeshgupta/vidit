@@ -10,9 +10,9 @@
     <string name="abtVidit">About Vidit!</string>
     <string name="search_hint">Search via title,owner</string>
     <string name="title_activity_video_details">Video Details</string>
-    <string name="strFrndsVideos">Video By Friends</string>
-    <string name="strMyVideos">My Videos</string>
-    <string name="strTagVideos">Tagged Videos</string>
+    <string name="strFrndsVideos"><b>Video By Friends</b></string>
+    <string name="strMyVideos"><b>My Videos</b></string>
+    <string name="strTagVideos"><b>Tagged Videos</b></string>
     <string name="title_activity_search_result">Search Result</string>
 
 </resources>
