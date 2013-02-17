@@ -13,10 +13,10 @@
         <Button
     android:id="@+id/btnVideoByFriends"
     android:layout_width="115.5dp"
-    android:layout_height="32dp"
+    android:layout_height="34dp"
     android:layout_marginLeft="-3dp"
     android:layout_marginTop="3dp"
-    android:background="#1D1B20"
+    android:background="#3F4142"
     android:textSize="11sp" 
     android:textColor="#465786"
     android:text="@string/strFrndsVideos" />
@@ -24,8 +24,8 @@
         <Button
     android:id="@+id/btnVideoByMe"
     android:layout_width="90dp"
-    android:layout_height="32dp"
-    android:background="#3F4142"
+    android:layout_height="34dp"
+    android:background="#1D1B20"
     android:text="@string/strMyVideos"
     android:textSize="11sp"
     android:textColor="#465786"
@@ -35,10 +35,10 @@
         <Button
     android:id="@+id/btnTaggedVideo"
     android:layout_width="match_parent"
-    android:layout_height="32dp"
+    android:layout_height="34dp"
     android:textSize="11sp"
     android:text="@string/strTagVideos"
-    android:background="#3F4142"
+    android:background="#1D1B20"
     android:layout_marginLeft="200dp"
     android:textColor="#465786"
     android:layout_marginTop="3dp"/>

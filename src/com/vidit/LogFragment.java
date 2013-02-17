@@ -175,9 +175,9 @@ public class LogFragment extends Fragment
 					@Override
 					public void onClick(View arg0) 
 					{
-						btnMyVideos.setBackgroundColor(Color.parseColor("#1D1B20"));
-						btnTaggedVideos.setBackgroundColor(Color.parseColor("#3F4142"));
-						btnFriendsVideos.setBackgroundColor(Color.parseColor("#3F4142"));
+						btnMyVideos.setBackgroundColor(Color.parseColor("#3F4142"));
+						btnTaggedVideos.setBackgroundColor(Color.parseColor("#1D1B20"));
+						btnFriendsVideos.setBackgroundColor(Color.parseColor("#1D1B20"));
 						/*SpannableString content = new SpannableString("My Videos");
 						content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
 						btnMyVideos.setText(content);*/
@@ -213,9 +213,9 @@ public class LogFragment extends Fragment
 					@Override
 					public void onClick(View arg0) 
 					{
-						btnFriendsVideos.setBackgroundColor(Color.parseColor("#1D1B20"));
-						btnTaggedVideos.setBackgroundColor(Color.parseColor("#3F4142"));
-						btnMyVideos.setBackgroundColor(Color.parseColor("#3F4142"));
+						btnFriendsVideos.setBackgroundColor(Color.parseColor("#3F4142"));
+						btnTaggedVideos.setBackgroundColor(Color.parseColor("#1D1B20"));
+						btnMyVideos.setBackgroundColor(Color.parseColor("#1D1B20"));
 						
 						if(index!=2)
 						{
@@ -254,9 +254,9 @@ public class LogFragment extends Fragment
 					@Override
 					public void onClick(View arg0) 
 					{
-						btnTaggedVideos.setBackgroundColor(Color.parseColor("#1D1B20"));
-						btnMyVideos.setBackgroundColor(Color.parseColor("#3F4142"));
-						btnFriendsVideos.setBackgroundColor(Color.parseColor("#3F4142"));
+						btnTaggedVideos.setBackgroundColor(Color.parseColor("#3F4142"));
+						btnMyVideos.setBackgroundColor(Color.parseColor("#1D1B20"));
+						btnFriendsVideos.setBackgroundColor(Color.parseColor("#1D1B20"));
 						
 						if(index!=3)
 						{

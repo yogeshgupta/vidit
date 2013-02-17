@@ -108,6 +108,7 @@ public class MainActivity extends FacebookActivity implements OnDataPass{
 		              return false;
 		            }
 		         });
+		        
 		        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 		        searchView.setIconifiedByDefault(false);
 		       
