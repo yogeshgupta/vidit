@@ -395,6 +395,10 @@ public class LogFragment extends Fragment
 		vidDetList = new ArrayList<HashMap<String,String>>();
 		try
 		{
+			int maxCount=9;
+			int count=0;
+			ArrayList<DownloadImageTask> offerImageTask=new ArrayList<DownloadImageTask>(); 
+			DownloadImageTask dwnTsk;
 			for ( int i = 0, size = data1.length(); i < size; i++ )
 			{
 				HashMap<String, String> hm = new HashMap<String,String>();
@@ -418,8 +422,33 @@ public class LogFragment extends Fragment
 						boolChk=false;
 					}
 					else
-						new DownloadImageTask().execute(arr);
-					
+					{	/*if(count<10)
+						{*/
+							dwnTsk=new DownloadImageTask();
+							dwnTsk.execute(arr);
+							/*offerImageTask.add(dwnTsk);
+							offerImageTask.get(offerImageTask.size()-1).execute(arr);*/
+							/*dwnTsk.cancel(true);
+							count++;
+						}
+						else
+						{
+							
+							for(int nCount=0;nCount<offerImageTask.size()-2;nCount++)
+							{
+								offerImageTask.get(nCount).cancel(true);
+								if(offerImageTask.get(nCount).isCancelled())
+									offerImageTask.remove(nCount);
+							}
+							
+							dwnTsk=new DownloadImageTask();
+							offerImageTask.add(dwnTsk);
+							offerImageTask.get(offerImageTask.size()-1).execute(arr);
+							dwnTsk.cancel(true);
+							count++;
+							break;
+						}*/
+					}
 				}
 				catch(Exception e)
 				{

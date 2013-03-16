@@ -142,7 +142,7 @@ public class VideoDetails extends Activity {
 					if(isDownloadManagerAvailable(context))
 					{
 						String url = jsonObj.getString("src");
-						DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+						DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url.replace("https://", "http://")));
 						request.setDescription("Downloading "+title);
 						request.setTitle(title+"_lq.mp4");
 						// in order for this if to run, you must use the android 3.2 to compile your app
@@ -150,8 +150,9 @@ public class VideoDetails extends Activity {
 						    request.allowScanningByMediaScanner();
 						    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 						}
+						
 						request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, title+".mp4");
-
+						
 						// get download service and enqueue file
 						DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
 						manager.enqueue(request);
@@ -183,7 +184,7 @@ public class VideoDetails extends Activity {
 					if(isDownloadManagerAvailable(context))
 					{
 						String url = jsonObj.getString("src_hq");
-						DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+						DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url.replace("https://", "http://")));
 						request.setDescription("Downloading "+title);
 						request.setTitle(title+"_hq.mp4");
 						// in order for this if to run, you must use the android 3.2 to compile your app
@@ -263,7 +264,10 @@ public class VideoDetails extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.vidit_menu2, menu);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+			getMenuInflater().inflate(R.menu.vidit_menu2, menu);
+		else
+			getMenuInflater().inflate(R.menu.vidit_menugb2, menu);
 		
 		try
 		{
@@ -425,6 +429,21 @@ public class VideoDetails extends Activity {
         		
         	case R.id.search:
         		onSearchRequested();
+        		return true;
+        		
+        	case R.id.aboutVidit:
+        		AlertDialog startAlert= new AlertDialog.Builder(this)
+      	      .setMessage("Vidit is an open source app, developed in free time."
+      	    		  +"Incase you want to contribute to it kindly visit the " +
+      	    		  "github page or contact the developer. You can also support the " +
+      	    		  "developer by making some donations.")
+      	      .setTitle("About Vidit")
+      	      .setCancelable(true)
+      	      .setNeutralButton(android.R.string.ok,
+      	         new DialogInterface.OnClickListener() {
+      	         public void onClick(DialogInterface dialog, int whichButton){}
+      	         })
+      	      .show();
         		return true;
         		
         	default:

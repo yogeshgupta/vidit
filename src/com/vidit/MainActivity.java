@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.annotation.SuppressLint;
@@ -88,7 +90,11 @@ public class MainActivity extends FacebookActivity implements OnDataPass{
 			logInOut.setVisible(false);
 		else
 			logInOut.setVisible(true);*/
-		getMenuInflater().inflate(R.menu.vidit_menu, menu);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+			getMenuInflater().inflate(R.menu.vidit_menu, menu);
+		else
+			getMenuInflater().inflate(R.menu.vidit_menugb, menu);
+		
 		try
 		{
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) 
@@ -152,6 +158,21 @@ public class MainActivity extends FacebookActivity implements OnDataPass{
         		onSearchRequested();
         		return true;
         		
+        	case R.id.aboutVidit:
+        		AlertDialog startAlert= new AlertDialog.Builder(this)
+      	      .setMessage("Vidit is an open source app, developed in free time."
+      	    		  +"Incase you want to contribute to it kindly visit the " +
+      	    		  "github page or contact the developer. You can also support the " +
+      	    		  "developer by making some donations.")
+      	      .setTitle("About Vidit")
+      	      .setCancelable(true)
+      	      .setNeutralButton(android.R.string.ok,
+      	         new DialogInterface.OnClickListener() {
+      	         public void onClick(DialogInterface dialog, int whichButton){}
+      	         })
+      	      .show();
+        		return true;
+        		
         	default:
                 return super.onOptionsItemSelected(item);
         }
@@ -213,7 +234,7 @@ public class MainActivity extends FacebookActivity implements OnDataPass{
 	protected void onStop()
 	{
 		super.onStop();
-		File storagePath = new File(Environment.getExternalStorageDirectory().toString() + "/FidVids");
+		File storagePath = new File(Environment.getExternalStorageDirectory().toString() + "/.FidVids");
 		boolean delDirectory=deleteDirectory(storagePath);
     }
 	
@@ -236,6 +257,26 @@ public class MainActivity extends FacebookActivity implements OnDataPass{
 	    }
 	    return( path.delete() );
 	  }*/
+	
+	/*@Override
+    public void onDestroy() {
+    super.onDestroy();
+
+    unbindDrawables(findViewById(R.id.RootView));
+    System.gc();
+    }
+
+    private void unbindDrawables(View view) {
+        if (view.getBackground() != null) {
+        view.getBackground().setCallback(null);
+        }
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+            unbindDrawables(((ViewGroup) view).getChildAt(i));
+            }
+        ((ViewGroup) view).removeAllViews();
+        }
+    }*/
 	
 	public boolean isOnline() 
 	{

@@ -286,6 +286,8 @@ containing a value of this type.
     public static final class menu {
         public static final int vidit_menu=0x7f0a0000;
         public static final int vidit_menu2=0x7f0a0001;
+        public static final int vidit_menugb=0x7f0a0002;
+        public static final int vidit_menugb2=0x7f0a0003;
     }
     public static final class string {
         public static final int abtVidit=0x7f060018;

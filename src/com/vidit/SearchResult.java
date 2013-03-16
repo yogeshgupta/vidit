@@ -15,9 +15,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
@@ -207,7 +209,10 @@ public class SearchResult extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.vidit_menu2, menu);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+			getMenuInflater().inflate(R.menu.vidit_menu2, menu);
+		else
+			getMenuInflater().inflate(R.menu.vidit_menugb2, menu);
 		
 		try
 		{
@@ -277,6 +282,21 @@ public class SearchResult extends Activity {
         		
         	case R.id.search:
         		onSearchRequested();
+        		return true;
+        		
+        	case R.id.aboutVidit:
+        		AlertDialog startAlert= new AlertDialog.Builder(this)
+      	      .setMessage("Vidit is an open source app, developed in free time."
+      	    		  +"Incase you want to contribute to it kindly visit the " +
+      	    		  "github page or contact the developer. You can also support the " +
+      	    		  "developer by making some donations.")
+      	      .setTitle("About Vidit")
+      	      .setCancelable(true)
+      	      .setNeutralButton(android.R.string.ok,
+      	         new DialogInterface.OnClickListener() {
+      	         public void onClick(DialogInterface dialog, int whichButton){}
+      	         })
+      	      .show();
         		return true;
         		
         	default:
