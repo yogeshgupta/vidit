@@ -44,8 +44,8 @@ public class MainActivity extends FacebookActivity implements OnDataPass{
 		setContentView(R.layout.activity_main);
 		
 		AlertDialog startAlert= new AlertDialog.Builder(this)
-	      .setMessage("This is a data extensive app, if you are downloading or playing a video" +
-	      		" we suggest you to connect to a wireless network to avoid exhausting your data plan.")
+	      .setMessage("If you are not on a wireless network or do not have a data plan, than " +
+    	      		"you might will incur data charges.")
 	      .setTitle("Vidit Message")
 	      .setCancelable(true)
 	      .setNeutralButton(android.R.string.ok,
